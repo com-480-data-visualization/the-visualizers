@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+  base: '/the-visualizers/',
   root: '.',
   publicDir: 'public',
   server: {
@@ -8,6 +9,7 @@ export default defineConfig({
     open: true
   },
   build: {
-    outDir: 'dist'
+    outDir: '../docs',
+    emptyOutDir: true
   }
 });
