@@ -12,7 +12,7 @@ let rotationTimer;
 export async function initGlobe(earthquakes) {
   earthquakeData = earthquakes.filter(d => d.lat != null && d.lon != null);
 
-  const resp = await fetch('/data/world-110m.json');
+  const resp = await fetch(import.meta.env.BASE_URL + 'data/world-110m.json');
   worldData = await resp.json();
 
   const container = document.getElementById('globe-chart');

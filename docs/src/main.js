@@ -12,9 +12,9 @@ import { initTakeaway } from './sections/takeaway.js';
 async function main() {
   // Load all data in parallel
   const [earthquakes, countries, countryYear] = await Promise.all([
-    d3.json('/data/earthquakes.json'),
-    d3.json('/data/countries.json'),
-    d3.json('/data/country_year.json'),
+    d3.json(import.meta.env.BASE_URL + 'data/earthquakes.json'),
+    d3.json(import.meta.env.BASE_URL + 'data/countries.json'),
+    d3.json(import.meta.env.BASE_URL + 'data/country_year.json'),
   ]);
 
   console.log(`Loaded: ${earthquakes.length} earthquakes, ${countries.length} countries, ${countryYear.length} country-year records`);
