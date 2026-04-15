@@ -1,0 +1,62 @@
+/* ===== TABLET (< 1024px) ===== */
+@media (max-width: 1024px) {
+  .nav-links { gap: 1rem; }
+  .nav-link { font-size: 0.75rem; }
+
+  .scrolly { flex-direction: column; }
+  .scrolly-graphic {
+    position: sticky;
+    width: 100%;
+    height: 55vh;
+    padding: 3rem 1rem 1rem;
+  }
+  .scrolly-text {
+    width: 100%;
+    padding: 0 1.5rem;
+  }
+  .step { min-height: 60vh; }
+
+  .hook-headline { font-size: 2.4rem; }
+  .hook-comparison { flex-direction: column; align-items: center; }
+  .hook-vs { flex-direction: row; min-width: auto; }
+  .hook-energy-bar { flex-direction: row; width: auto; }
+
+  .comparison-panels {
+    grid-template-columns: 1fr;
+  }
+  .comparison-radar {
+    width: 100%;
+    max-width: 350px;
+    margin: 0 auto;
+  }
+}
+
+/* ===== MOBILE (< 768px) ===== */
+@media (max-width: 768px) {
+  html { font-size: 15px; }
+
+  .nav-links { display: none; }
+
+  .scrolly-graphic { height: 45vh; }
+
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.5rem; }
+
+  .hook-headline { font-size: 1.8rem; }
+  .hook-card { max-width: 100%; }
+  .hook-value { font-size: 1.5rem; }
+  .hook-stat-deaths .hook-value { font-size: 2rem; }
+
+  .gapminder-controls {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .year-slider { width: 140px; }
+
+  .comparison-selectors {
+    flex-direction: column;
+  }
+  .country-select { min-width: 100%; }
+
+  .takeaway-headline { font-size: 2rem; }
+}

@@ -1,0 +1,334 @@
+/* ===== CHART CONTAINERS ===== */
+.chart-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.chart-container svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ===== AXES ===== */
+.axis path,
+.axis line {
+  stroke: #ccc;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  fill: #888;
+}
+
+.axis-label {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12px;
+  fill: #666;
+  font-weight: 500;
+}
+
+.grid line {
+  stroke: #eee;
+  stroke-dasharray: 2,2;
+}
+
+.grid path {
+  stroke: none;
+}
+
+/* ===== TOOLTIP ===== */
+.tooltip {
+  position: fixed;
+  pointer-events: none;
+  background: #fff;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  max-width: 260px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 1001;
+}
+
+.tooltip.visible {
+  opacity: 1;
+}
+
+.tooltip-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+  color: #1a1a2e;
+}
+
+.tooltip-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.tooltip-label {
+  color: #888;
+}
+
+.tooltip-value {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  color: #1a1a2e;
+}
+
+/* ===== LEGEND ===== */
+.legend {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 11px;
+}
+
+.legend-title {
+  font-weight: 600;
+  font-size: 12px;
+  fill: #444;
+}
+
+.legend-item {
+  cursor: pointer;
+}
+
+.legend-item text {
+  fill: #666;
+}
+
+/* ===== ANNOTATIONS ===== */
+.annotation-line {
+  stroke: #888;
+  stroke-width: 1;
+  stroke-dasharray: 4,3;
+}
+
+.annotation-text {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 11px;
+  fill: #555;
+  font-style: italic;
+}
+
+.annotation-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  fill: #1a1a2e;
+  font-weight: 500;
+}
+
+/* ===== GLOBE ===== */
+.globe-water {
+  fill: #e8f0fe;
+}
+
+.globe-land {
+  fill: #ddd;
+  stroke: #bbb;
+  stroke-width: 0.5;
+}
+
+.globe-border {
+  fill: none;
+  stroke: #999;
+  stroke-width: 0.5;
+}
+
+.globe-graticule {
+  fill: none;
+  stroke: #eee;
+  stroke-width: 0.3;
+}
+
+.earthquake-dot {
+  stroke: #fff;
+  stroke-width: 0.5;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+.earthquake-dot:hover {
+  stroke-width: 1.5;
+}
+
+/* ===== SCATTER PLOT ===== */
+.scatter-dot {
+  cursor: pointer;
+  transition: opacity 0.3s, r 0.3s;
+}
+
+.scatter-dot.dimmed {
+  opacity: 0.08;
+}
+
+.regression-line {
+  fill: none;
+  stroke-width: 2;
+  stroke-dasharray: 6,4;
+}
+
+/* ===== GAPMINDER BUBBLES ===== */
+.gapminder-bubble {
+  stroke: rgba(255,255,255,0.6);
+  stroke-width: 1;
+  cursor: pointer;
+  transition: stroke-width 0.2s;
+}
+
+.gapminder-bubble:hover {
+  stroke-width: 2.5;
+  stroke: #1a1a2e;
+}
+
+.gapminder-bubble.pinned {
+  stroke: #1a1a2e;
+  stroke-width: 2;
+}
+
+.gapminder-trail {
+  fill: none;
+  stroke-width: 1.5;
+  opacity: 0.4;
+}
+
+.gapminder-year-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 72px;
+  fill: rgba(0,0,0,0.04);
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.gapminder-country-label {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 11px;
+  fill: #333;
+  font-weight: 500;
+  pointer-events: none;
+}
+
+/* ===== CORRELATION SMALL MULTIPLES ===== */
+.corr-cell {
+  cursor: pointer;
+}
+
+.corr-cell > rect {
+  fill: #fff;
+  stroke: #eee;
+  rx: 6;
+}
+
+.corr-cell:hover > rect {
+  stroke: #999;
+}
+
+.corr-r-value {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.corr-indicator-label {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  fill: #333;
+}
+
+/* ===== COMPARISON ===== */
+.stat-card {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.stat-card:last-child {
+  border-bottom: none;
+}
+
+.stat-card-label {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.stat-card-value {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.panel-title {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* ===== RADAR CHART ===== */
+.radar-axis {
+  stroke: #ddd;
+  stroke-width: 1;
+}
+
+.radar-grid {
+  fill: none;
+  stroke: #eee;
+  stroke-width: 0.5;
+}
+
+.radar-area {
+  opacity: 0.25;
+}
+
+.radar-line {
+  fill: none;
+  stroke-width: 2;
+}
+
+.radar-label {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 10px;
+  fill: #666;
+}
+
+/* ===== TIMELINE ===== */
+.timeline-band-label {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  fill: #555;
+}
+
+.timeline-dot {
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.timeline-dot:hover {
+  stroke: #1a1a2e;
+  stroke-width: 2;
+}
+
+.income-band {
+  fill: rgba(0,0,0,0.02);
+  stroke: rgba(0,0,0,0.05);
+}
+
+.income-band:nth-child(odd) {
+  fill: rgba(0,0,0,0.04);
+}
+
+/* ===== BRUSH ===== */
+.brush .selection {
+  fill: rgba(26, 26, 46, 0.1);
+  stroke: #1a1a2e;
+  stroke-width: 1;
+}
