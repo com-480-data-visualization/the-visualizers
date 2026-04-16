@@ -25,8 +25,9 @@ export function initTimeline(earthquakes) {
   g = svg.append('g')
     .attr('transform', `translate(${margin.left},${margin.top})`);
 
+  const [yMin, yMax] = d3.extent(data, d => d.year);
   xScale = d3.scaleLinear()
-    .domain([1960, 2026])
+    .domain([yMin, yMax + 1])
     .range([0, width]);
 
   yScale = d3.scaleBand()

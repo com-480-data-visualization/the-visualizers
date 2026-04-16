@@ -45,43 +45,43 @@
         <div class="hook-card hook-card-haiti">
           <div class="hook-flag">🇭🇹</div>
           <h2 class="hook-country">Haiti</h2>
-          <div class="hook-date">January 12, 2010</div>
+          <div class="hook-date" data-fact="haiti-2010-date">…</div>
           <div class="hook-stat">
             <span class="hook-label">Magnitude</span>
-            <span class="hook-value hook-mag">7.0</span>
+            <span class="hook-value hook-mag" data-fact="haiti-2010-mag">…</span>
           </div>
           <div class="hook-stat hook-stat-deaths">
             <span class="hook-label">Deaths</span>
-            <span class="hook-value hook-deaths" data-target="222570">0</span>
+            <span class="hook-value hook-deaths" data-counter="haiti-2010-deaths" data-target="0">0</span>
           </div>
         </div>
 
         <div class="hook-vs">
           <div class="hook-energy-label">Seismic Energy</div>
           <div class="hook-energy-bar">
-            <div class="hook-energy-fill hook-energy-haiti" data-width="0.2">Haiti</div>
-            <div class="hook-energy-fill hook-energy-chile" data-width="100">Chile (500× more)</div>
+            <div class="hook-energy-fill hook-energy-haiti">Haiti</div>
+            <div class="hook-energy-fill hook-energy-chile">Chile (<span data-fact="energy-ratio">…</span>× more)</div>
           </div>
         </div>
 
         <div class="hook-card hook-card-chile">
           <div class="hook-flag">🇨🇱</div>
           <h2 class="hook-country">Chile</h2>
-          <div class="hook-date">February 27, 2010</div>
+          <div class="hook-date" data-fact="chile-2010-date">…</div>
           <div class="hook-stat">
             <span class="hook-label">Magnitude</span>
-            <span class="hook-value hook-mag">8.8</span>
+            <span class="hook-value hook-mag" data-fact="chile-2010-mag">…</span>
           </div>
           <div class="hook-stat hook-stat-deaths">
             <span class="hook-label">Deaths</span>
-            <span class="hook-value hook-deaths" data-target="562">0</span>
+            <span class="hook-value hook-deaths" data-counter="chile-2010-deaths" data-target="0">0</span>
           </div>
         </div>
       </div>
 
       <div class="hook-question">
-        <p>Chile's earthquake released <strong>500 times</strong> more energy.<br>
-        Yet Haiti lost <strong>396 times</strong> more lives.</p>
+        <p>Chile's earthquake released <strong><span data-fact="energy-ratio">…</span> times</strong> more energy.<br>
+        Yet Haiti lost <strong><span data-fact="death-ratio">…</span> times</strong> more lives.</p>
         <p class="hook-thesis">The difference was not geology.<br>It was wealth, infrastructure, and preparedness.</p>
       </div>
 
@@ -101,7 +101,7 @@
       <div class="scrolly-text">
         <div class="step" data-step="globe-1">
           <h2>Earthquakes Don't Discriminate</h2>
-          <p>From 1960 to 2026, over <strong>2,600 significant earthquakes</strong> struck across the globe. They hit rich and poor countries alike.</p>
+          <p>From <span data-fact="year-min">…</span> to <span data-fact="year-max">…</span>, <strong><span data-fact="event-count">…</span> significant earthquakes</strong> struck across the globe. They hit rich and poor countries alike.</p>
         </div>
         <div class="step" data-step="globe-2">
           <p>Some earthquakes are enormous — magnitude 8 or 9. Others are moderate but still destructive. <strong>Size the dots by magnitude</strong> to see the variation.</p>
@@ -128,14 +128,14 @@
           <p>We assume bigger earthquakes kill more people. Let's test that. Each dot is one earthquake — magnitude on the horizontal axis, deaths on the vertical.</p>
         </div>
         <div class="step" data-step="mag-2">
-          <p>The correlation is weak: <strong>r = 0.22</strong>. Magnitude alone explains very little about who dies.</p>
+          <p>The correlation is weak: <strong>r = <span data-r="mag-vs-deaths">…</span></strong>. Magnitude alone explains very little about who dies.</p>
         </div>
         <div class="step" data-step="mag-3">
           <p>Now let's color each dot by the <strong>GDP per capita</strong> of the country it struck. Red means poor. Blue means rich.</p>
           <p>The pattern snaps into focus.</p>
         </div>
         <div class="step" data-step="mag-4">
-          <p><strong>GDP per capita correlates with deaths far more strongly than magnitude does</strong> (r = −0.47 vs r = 0.22). Haiti's M7.0 killed 222,000. Chile's M8.8 killed 562.</p>
+          <p><strong>GDP per capita correlates with deaths far more strongly than magnitude does</strong> (r = <span data-r="gdp-vs-dpe">…</span> vs r = <span data-r="mag-vs-deaths">…</span>). Haiti's M<span data-fact="haiti-2010-mag">…</span> killed <span data-fact="haiti-2010-deaths">…</span>. Chile's M<span data-fact="chile-2010-mag">…</span> killed <span data-fact="chile-2010-deaths">…</span>.</p>
         </div>
       </div>
     </div>
@@ -160,13 +160,13 @@
           <p>Each bubble is a country. Size = number of events. Color = world region.</p>
         </div>
         <div class="step" data-step="gap-2">
-          <p>Press <strong>Play</strong> to watch the pattern unfold from 1960 to today. Wealthier countries consistently cluster toward the bottom — fewer deaths per event.</p>
+          <p>Press <strong>Play</strong> to watch the pattern unfold from <span data-fact="year-min">…</span> to today. Wealthier countries consistently cluster toward the bottom — fewer deaths per event.</p>
         </div>
         <div class="step" data-step="gap-3">
           <p>Click any bubble to <strong>pin it</strong> and trace its trajectory over time. Watch how countries move as their economies develop.</p>
         </div>
         <div class="step" data-step="gap-4">
-          <p>Key moments stand out: <strong>1976 Tangshan</strong> (242,000 dead), <strong>2004 Indian Ocean</strong>, <strong>2010 Haiti</strong>, <strong>2023 Turkey-Syria</strong>. Each a devastating outlier — all in lower-income contexts.</p>
+          <p>Key moments stand out: <span data-fact-html="top-deadliest">…</span>. Each a devastating outlier — all in lower-income contexts.</p>
         </div>
       </div>
     </div>
@@ -184,7 +184,7 @@
           <p>GDP is the strongest single predictor. But earthquake vulnerability is <strong>multi-dimensional</strong>. Let's look at all the factors together.</p>
         </div>
         <div class="step" data-step="corr-2">
-          <p>Each small chart plots one indicator against deaths per event. <strong>GDP</strong> (r = −0.47), <strong>HDI</strong> (r = −0.37), and <strong>hospital beds</strong> (r = −0.35) all show strong negative correlations.</p>
+          <p>Each small chart plots one indicator against deaths per event. <strong>GDP</strong> (r = <span data-r="gdp-vs-dpe">…</span>), <strong>HDI</strong> (r = <span data-r="hdi-vs-dpe">…</span>), and <strong>hospital beds</strong> (r = <span data-r="beds-vs-dpe">…</span>) all show strong negative correlations.</p>
         </div>
         <div class="step" data-step="corr-3">
           <p><strong>Brush over any chart</strong> to highlight the same countries across all plots. This reveals which nations are consistently vulnerable — and which are consistently protected.</p>
@@ -230,8 +230,8 @@
       </div>
       <div class="scrolly-text">
         <div class="step" data-step="time-1">
-          <h2>66 Years of Earthquakes</h2>
-          <p>Every significant earthquake from 1960 to 2026, organized by <strong>income group</strong> of the country it struck. Circle size shows deaths.</p>
+          <h2><span data-fact="year-span">…</span> Years of Earthquakes</h2>
+          <p>Every significant earthquake from <span data-fact="year-min">…</span> to <span data-fact="year-max">…</span>, organized by <strong>income group</strong> of the country it struck. Circle size shows deaths.</p>
         </div>
         <div class="step" data-step="time-2">
           <p>The deadliest events — <strong>the largest circles</strong> — cluster overwhelmingly in low and lower-middle income countries.</p>
@@ -248,7 +248,7 @@
     <div class="takeaway-container">
       <h2 class="takeaway-headline">Earthquakes are natural.<br><em>Disasters</em> are not.</h2>
       <p class="takeaway-text">
-        Across 66 years and 2,679 earthquakes, the data tells one consistent story:
+        Across <span data-fact="year-span">…</span> years and <span data-fact="event-count">…</span> earthquakes, the data tells one consistent story:
         the countries that suffer most are not those with the strongest quakes,
         but those with the fewest resources to prepare and respond.
       </p>
@@ -260,7 +260,7 @@
 
       <div class="takeaway-credits">
         <h3>Methodology & Data</h3>
-        <p>Earthquake data: <a href="https://doi.org/10.7289/V5TD9V7K">NOAA NCEI Significant Earthquake Database</a> (1960–2026, 2,679 events)</p>
+        <p>Earthquake data: <a href="https://doi.org/10.7289/V5TD9V7K">NOAA NCEI Significant Earthquake Database</a> (<span data-fact="year-min">…</span>–<span data-fact="year-max">…</span>, <span data-fact="event-count">…</span> events)</p>
         <p>Socioeconomic data: <a href="https://data.worldbank.org">World Bank Open Data</a> (GDP, population density, urbanization, hospital beds)</p>
         <p>Human Development Index: <a href="https://hdr.undp.org">UNDP Human Development Reports</a></p>
 

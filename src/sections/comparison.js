@@ -7,16 +7,25 @@ let earthquakesData, countriesData;
 let currentA, currentB;
 
 const RADAR_INDICATORS = [
-  { key: 'avg_gdp', label: 'GDP/capita', max: 80000 },
+  { key: 'avg_gdp', label: 'GDP/capita' },
   { key: 'hdi', label: 'HDI', max: 1 },
-  { key: 'avg_hospital_beds', label: 'Hospital beds', max: 12 },
+  { key: 'avg_hospital_beds', label: 'Hospital beds' },
   { key: 'avg_urban_pct', label: 'Urban %', max: 100 },
-  { key: 'deaths_per_event', label: 'Deaths/event', max: 50000, invert: true },
+  { key: 'deaths_per_event', label: 'Deaths/event', invert: true },
 ];
 
 export function initComparison(earthquakes, countries) {
   earthquakesData = earthquakes;
   countriesData = countries;
+
+  // Derive per-indicator max from data (95th percentile for skewed indicators)
+  RADAR_INDICATORS.forEach(ind => {
+    if (ind.max != null) return;
+    const vals = countries.map(d => d[ind.key]).filter(v => v != null && isFinite(v)).sort((a, b) => a - b);
+    if (!vals.length) { ind.max = 1; return; }
+    const idx = Math.floor(vals.length * 0.95);
+    ind.max = vals[Math.min(idx, vals.length - 1)];
+  });
 
   // Populate dropdowns
   const sortedCountries = countries

@@ -8,7 +8,8 @@ import { showTooltip, moveTooltip, hideTooltip } from '../components/tooltip.js'
 let svg, g, bubblesG, trailsG, yearLabel;
 let xScale, yScale, rScale;
 let countryYearMap, allCountries, pinnedCountries;
-let currentYear = 1960;
+let yearMin, yearMax;
+let currentYear;
 let playing = false;
 let playInterval;
 let width, height;
@@ -26,6 +27,12 @@ export function initGapminder(countryYearData, countriesData) {
     if (!countryYearMap.has(d.country)) countryYearMap.set(d.country, new Map());
     countryYearMap.get(d.country).set(d.year, d);
   }
+
+  // Derive year range from actual data
+  const years = countryYearData.map(d => d.year).filter(y => y != null);
+  yearMin = d3.min(years);
+  yearMax = d3.max(years);
+  currentYear = yearMin;
 
   allCountries = countriesData.filter(d => d.avg_gdp != null && d.events >= 3);
   pinnedCountries = new Set();
@@ -65,7 +72,7 @@ export function initGapminder(countryYearData, countriesData) {
     .attr('x', width / 2)
     .attr('y', height / 2 + 25)
     .attr('text-anchor', 'middle')
-    .text('1960');
+    .text(yearMin);
 
   // Legend
   addRegionLegend(g, width - 150, 10);
@@ -80,6 +87,11 @@ export function initGapminder(countryYearData, countriesData) {
   const playBtn = document.getElementById('gapminder-play');
   const slider = document.getElementById('gapminder-slider');
   const yearDisplay = document.getElementById('gapminder-year');
+
+  slider.min = yearMin;
+  slider.max = yearMax;
+  slider.value = yearMin;
+  yearDisplay.textContent = yearMin;
 
   playBtn.addEventListener('click', () => {
     if (playing) {
@@ -102,7 +114,7 @@ export function initGapminder(countryYearData, countriesData) {
   });
 
   // Initial render
-  updateBubbles(1960);
+  updateBubbles(yearMin);
 }
 
 function getYearData(year) {
@@ -211,7 +223,7 @@ function updateTrails() {
     if (!yearMap) continue;
 
     const points = [];
-    for (let y = 1960; y <= currentYear; y++) {
+    for (let y = yearMin; y <= currentYear; y++) {
       const rec = yearMap.get(y);
       if (rec && rec.gdp_pc) {
         points.push([xScale(rec.gdp_pc), yScale(Math.max(0.1, rec.deaths_per_event || 0.1))]);
@@ -238,11 +250,11 @@ function setYear(year) {
 
 function startPlay() {
   playing = true;
-  if (currentYear >= 2025) currentYear = 1960;
+  if (currentYear >= yearMax) currentYear = yearMin;
 
   playInterval = setInterval(() => {
     currentYear++;
-    if (currentYear > 2025) {
+    if (currentYear > yearMax) {
       stopPlay();
       document.getElementById('gapminder-play').textContent = '▶ Play';
       return;
@@ -259,7 +271,7 @@ function stopPlay() {
 export function onGapminderStep(stepId) {
   switch (stepId) {
     case 'gap-1':
-      setYear(1960);
+      setYear(yearMin);
       break;
     case 'gap-2':
       startPlay();

@@ -135,12 +135,13 @@ export function onMagnitudeStep(stepId) {
       const haiti = data.find(d => d.country === 'Haiti' && d.year === 2010);
       const chile = data.find(d => d.country === 'Chile' && d.year === 2010);
 
+      const fmtDeaths = n => n >= 1000 ? `${Math.round(n / 1000)}K` : String(n);
       if (haiti) {
         addAnnotation(g, {
           x: xScale(haiti.mag),
           y: yScale(Math.max(1, haiti.deaths)),
           dx: -60, dy: -30,
-          text: 'Haiti 2010 (M7.0, 222K deaths)',
+          text: `Haiti ${haiti.year} (M${haiti.mag.toFixed(1)}, ${fmtDeaths(haiti.deaths)} deaths)`,
           color: '#dc2626'
         });
       }
@@ -149,7 +150,7 @@ export function onMagnitudeStep(stepId) {
           x: xScale(chile.mag),
           y: yScale(Math.max(1, chile.deaths)),
           dx: -80, dy: 30,
-          text: 'Chile 2010 (M8.8, 562 deaths)',
+          text: `Chile ${chile.year} (M${chile.mag.toFixed(1)}, ${fmtDeaths(chile.deaths)} deaths)`,
           color: '#10b981'
         });
       }

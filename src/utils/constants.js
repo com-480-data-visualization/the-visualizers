@@ -62,6 +62,7 @@ export const DISPLAY_NAMES = {
   'Gambia, The': 'Gambia',
   'Brunei Darussalam': 'Brunei',
   'Turkiye': 'Turkey',
+  'Viet Nam': 'Vietnam',
 };
 
 export function displayName(country) {

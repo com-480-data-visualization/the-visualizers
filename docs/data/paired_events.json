@@ -2,7 +2,7 @@
   {
     "id": "haiti-chile-2010",
     "title": "Haiti vs Chile, 2010",
-    "description": "Seven weeks apart. Chile's earthquake released 500\u00d7 more energy, yet killed 400\u00d7 fewer people.",
+    "description": "Seven weeks apart. Chile's earthquake released 500x more energy, yet killed 400x fewer people.",
     "country_a": "Haiti",
     "country_b": "Chile",
     "event_a": {
@@ -23,7 +23,7 @@
   {
     "id": "iran-japan-2003",
     "title": "Iran vs Japan",
-    "description": "Both earthquake-prone. Japan has 10\u00d7 more events but a fraction of Iran's death toll.",
+    "description": "Both earthquake-prone. Japan has 10x more events but a fraction of Iran's death toll.",
     "country_a": "Iran, Islamic Rep.",
     "country_b": "Japan"
   },
