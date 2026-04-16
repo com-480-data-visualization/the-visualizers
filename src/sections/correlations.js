@@ -1,24 +1,32 @@
 import * as d3 from 'd3';
 import { pearsonR } from '../utils/data-transforms.js';
 import { showTooltip, moveTooltip, hideTooltip, countryTooltipHTML } from '../components/tooltip.js';
-import { displayName } from '../utils/constants.js';
 
 let svg, g, cells;
 let countriesData;
 let selectedCountries = new Set();
 let width, height;
 
+// Matches the notebook cell-50 correlation matrix (EDA section 5.6):
+//   country_agg filtered to events >= 5,
+//   x = raw country-aggregated indicator (no log transform),
+//   y = log10(clip(deaths_per_event, 0.01)).
+// The same methodology is applied to all six panels so the r values reproduce
+// the "Log deaths/event" column of the notebook's correlation matrix.
 const INDICATORS = [
-  { key: 'avg_gdp', label: 'GDP per capita', log: true },
-  { key: 'hdi', label: 'HDI', log: false },
-  { key: 'avg_hospital_beds', label: 'Hospital beds/1K', log: false },
-  { key: 'avg_urban_pct', label: 'Urban %', log: false },
-  { key: 'avg_pop_density', label: 'Pop. density', log: true },
-  { key: 'avg_mag', label: 'Avg magnitude', log: false },
+  { key: 'avg_gdp',           label: 'GDP per capita'   },
+  { key: 'hdi',               label: 'HDI'              },
+  { key: 'avg_hospital_beds', label: 'Hospital beds/1K' },
+  { key: 'avg_urban_pct',     label: 'Urban %'          },
+  { key: 'avg_pop_density',   label: 'Pop. density'     },
+  { key: 'avg_mag',           label: 'Avg magnitude'    },
 ];
 
+const DEATHS_CLIP = 0.01;
+const logDeathsPerEvent = (d) => Math.log10(Math.max(d.deaths_per_event, DEATHS_CLIP));
+
 export function initCorrelations(countries) {
-  countriesData = countries.filter(d => d.events >= 5 && d.deaths_per_event > 0);
+  countriesData = countries.filter(d => d.events >= 5);
 
   const container = document.getElementById('correlations-chart');
   const rect = container.getBoundingClientRect();
@@ -49,23 +57,21 @@ function renderGrid() {
     const plotW = cellW - pad.left - pad.right;
     const plotH = cellH - pad.top - pad.bottom;
 
-    const validData = countriesData.filter(d => d[indicator.key] != null);
+    const validData = countriesData.filter(d => d[indicator.key] != null && d.deaths_per_event != null);
 
-    const xVals = validData.map(d => indicator.log ? Math.log10(d[indicator.key]) : d[indicator.key]);
-    const yVals = validData.map(d => Math.log10(d.deaths_per_event));
+    const xVals = validData.map(d => d[indicator.key]);
+    const yVals = validData.map(logDeathsPerEvent);
     const r = pearsonR(xVals, yVals);
 
     const cellG = g.append('g')
       .attr('class', 'corr-cell')
       .attr('transform', `translate(${cx},${cy})`);
 
-    // Background
     cellG.append('rect')
       .attr('width', cellW - 10)
       .attr('height', cellH - 10)
       .attr('rx', 8);
 
-    // Title
     cellG.append('text')
       .attr('class', 'corr-indicator-label')
       .attr('x', pad.left + plotW / 2)
@@ -73,25 +79,22 @@ function renderGrid() {
       .attr('text-anchor', 'middle')
       .text(indicator.label);
 
-    // R value
     cellG.append('text')
       .attr('class', 'corr-r-value')
       .attr('x', cellW - pad.right - 15)
       .attr('y', 18)
       .attr('text-anchor', 'end')
-      .attr('fill', r < -0.3 ? '#dc2626' : r < -0.1 ? '#f59e0b' : '#666')
+      .attr('fill', r < -0.3 ? '#dc2626' : r < -0.1 ? '#f59e0b' : r > 0.3 ? '#2563eb' : '#666')
       .text(`r = ${r?.toFixed(2)}`);
 
     const plotG = cellG.append('g')
       .attr('transform', `translate(${pad.left},${pad.top})`);
 
-    // Scales
     const xExtent = d3.extent(xVals);
     const yExtent = d3.extent(yVals);
     const xScale = d3.scaleLinear().domain(xExtent).range([0, plotW]).nice();
     const yScale = d3.scaleLinear().domain(yExtent).range([plotH, 0]).nice();
 
-    // Axes
     plotG.append('g')
       .attr('class', 'axis')
       .attr('transform', `translate(0,${plotH})`)
@@ -101,13 +104,12 @@ function renderGrid() {
       .attr('class', 'axis')
       .call(d3.axisLeft(yScale).ticks(4).tickSize(3));
 
-    // Dots
     const dotsG = plotG.selectAll('.corr-dot')
       .data(validData)
       .join('circle')
       .attr('class', 'corr-dot')
-      .attr('cx', d => xScale(indicator.log ? Math.log10(d[indicator.key]) : d[indicator.key]))
-      .attr('cy', d => yScale(Math.log10(d.deaths_per_event)))
+      .attr('cx', d => xScale(d[indicator.key]))
+      .attr('cy', d => yScale(logDeathsPerEvent(d)))
       .attr('r', 4)
       .attr('fill', '#1a1a2e')
       .attr('opacity', 0.55)
@@ -125,7 +127,6 @@ function renderGrid() {
     return { cellG, plotG, dotsG, xScale, yScale, indicator, validData };
   });
 
-  // Brush on each cell
   cells.forEach(cell => {
     const plotW = cell.xScale.range()[1];
     const plotH = cell.yScale.range()[0];
@@ -140,9 +141,8 @@ function renderGrid() {
         const [[x0, y0], [x1, y1]] = event.selection;
         selectedCountries.clear();
         cell.validData.forEach(d => {
-          const key = cell.indicator.key;
-          const cx = cell.xScale(cell.indicator.log ? Math.log10(d[key]) : d[key]);
-          const cy = cell.yScale(Math.log10(d.deaths_per_event));
+          const cx = cell.xScale(d[cell.indicator.key]);
+          const cy = cell.yScale(logDeathsPerEvent(d));
           if (cx >= x0 && cx <= x1 && cy >= y0 && cy <= y1) {
             selectedCountries.add(d.country);
           }
