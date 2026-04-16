@@ -140,7 +140,7 @@ export function onMagnitudeStep(stepId) {
           x: xScale(haiti.mag),
           y: yScale(Math.max(1, haiti.deaths)),
           dx: -60, dy: -30,
-          text: 'Haiti 2010 (M7.0, 222K deaths)',
+          text: `Haiti 2010 (M${haiti.mag}, ${d3.format(',')(haiti.deaths)} deaths)`,
           color: '#dc2626'
         });
       }
@@ -149,7 +149,7 @@ export function onMagnitudeStep(stepId) {
           x: xScale(chile.mag),
           y: yScale(Math.max(1, chile.deaths)),
           dx: -80, dy: 30,
-          text: 'Chile 2010 (M8.8, 562 deaths)',
+          text: `Chile 2010 (M${chile.mag}, ${d3.format(',')(chile.deaths)} deaths)`,
           color: '#10b981'
         });
       }

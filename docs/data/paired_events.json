@@ -1,44 +1,40 @@
 [
   {
-    "id": "haiti-chile-2010",
-    "title": "Haiti vs Chile, 2010",
-    "description": "Seven weeks apart. Chile's earthquake released 500\u00d7 more energy, yet killed 400\u00d7 fewer people.",
-    "country_a": "Haiti",
-    "country_b": "Chile",
-    "event_a": {
-      "year": 2010,
-      "mag": 7.0,
-      "deaths": 316000,
-      "gdp_pc": 671,
-      "hdi": 0.552
-    },
-    "event_b": {
-      "year": 2010,
-      "mag": 8.8,
-      "deaths": 562,
-      "gdp_pc": 12785,
-      "hdi": 0.862
-    }
+    "label": "Haiti 2010 vs Chile 2010",
+    "events": [
+      {
+        "country": "Haiti",
+        "year": 2010,
+        "mag": 7.0,
+        "deaths": 316000.0,
+        "gdp_pc": 1209.72733503094
+      },
+      {
+        "country": "Chile",
+        "year": 2010,
+        "mag": 8.8,
+        "deaths": 558.0,
+        "gdp_pc": 12632.8704724192
+      }
+    ]
   },
   {
-    "id": "iran-japan-2003",
-    "title": "Iran vs Japan",
-    "description": "Both earthquake-prone. Japan has 10\u00d7 more events but a fraction of Iran's death toll.",
-    "country_a": "Iran, Islamic Rep.",
-    "country_b": "Japan"
-  },
-  {
-    "id": "nepal-newzealand",
-    "title": "Nepal vs New Zealand",
-    "description": "Similar seismic exposure, vastly different outcomes driven by building codes and emergency response.",
-    "country_a": "Nepal",
-    "country_b": "New Zealand"
-  },
-  {
-    "id": "turkey-italy",
-    "title": "Turkey vs Italy",
-    "description": "Mediterranean neighbors with similar geology but different enforcement of building standards.",
-    "country_a": "Turkiye",
-    "country_b": "Italy"
+    "label": "Iran 2003 vs Japan 2011",
+    "events": [
+      {
+        "country": "Iran, Islamic Rep.",
+        "year": 2003,
+        "mag": 6.6,
+        "deaths": 31000.0,
+        "gdp_pc": 2208.99636552406
+      },
+      {
+        "country": "Japan",
+        "year": 2011,
+        "mag": 9.1,
+        "deaths": 18423.0,
+        "gdp_pc": 48760.0789494211
+      }
+    ]
   }
 ]

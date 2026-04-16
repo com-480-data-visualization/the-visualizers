@@ -24,11 +24,9 @@
       <div class="nav-links">
         <a href="#hook" class="nav-link active" data-section="0">The Question</a>
         <a href="#globe" class="nav-link" data-section="1">Where</a>
-        <a href="#magnitude" class="nav-link" data-section="2">The Myth</a>
-        <a href="#gapminder" class="nav-link" data-section="3">The Pattern</a>
+
         <a href="#correlations" class="nav-link" data-section="4">The Factors</a>
         <a href="#comparison" class="nav-link" data-section="5">Compare</a>
-        <a href="#timeline" class="nav-link" data-section="6">Timeline</a>
       </div>
     </div>
   </nav>
@@ -38,7 +36,9 @@
     <div class="hook-container">
       <div class="hook-intro">
         <h1 class="hook-headline">The Same Earthquake.<br>Two Different Stories.</h1>
-        <p class="hook-subline">In 2010, two major earthquakes struck Latin America — seven weeks apart.</p>
+        <p class="hook-subline" style="text-align: center;">
+          In 2010, two major earthquakes struck Latin America - seven weeks apart.
+        </p>
       </div>
 
       <div class="hook-comparison">
@@ -52,7 +52,7 @@
           </div>
           <div class="hook-stat hook-stat-deaths">
             <span class="hook-label">Deaths</span>
-            <span class="hook-value hook-deaths" data-target="222570">0</span>
+            <span class="hook-value hook-deaths" data-target="316000">0</span>
           </div>
         </div>
 
@@ -74,14 +74,14 @@
           </div>
           <div class="hook-stat hook-stat-deaths">
             <span class="hook-label">Deaths</span>
-            <span class="hook-value hook-deaths" data-target="562">0</span>
+            <span class="hook-value hook-deaths" data-target="558">0</span>
           </div>
         </div>
       </div>
 
       <div class="hook-question">
-        <p>Chile's earthquake released <strong>500 times</strong> more energy.<br>
-        Yet Haiti lost <strong>396 times</strong> more lives.</p>
+        <p>Chile's earthquake released <strong>501 times</strong> more energy.<br>
+        Yet Haiti lost <strong>566 times</strong> more lives.</p>
         <p class="hook-thesis">The difference was not geology.<br>It was wealth, infrastructure, and preparedness.</p>
       </div>
 
@@ -116,61 +116,7 @@
     </div>
   </section>
 
-  <!-- ===================== SECTION 2: MAGNITUDE MYTH ===================== -->
-  <section class="section section-scrolly" id="magnitude">
-    <div class="scrolly">
-      <div class="scrolly-graphic">
-        <div class="chart-container" id="magnitude-chart"></div>
-      </div>
-      <div class="scrolly-text">
-        <div class="step" data-step="mag-1">
-          <h2>The Magnitude Myth</h2>
-          <p>We assume bigger earthquakes kill more people. Let's test that. Each dot is one earthquake — magnitude on the horizontal axis, deaths on the vertical.</p>
-        </div>
-        <div class="step" data-step="mag-2">
-          <p>The correlation is weak: <strong>r = 0.22</strong>. Magnitude alone explains very little about who dies.</p>
-        </div>
-        <div class="step" data-step="mag-3">
-          <p>Now let's color each dot by the <strong>GDP per capita</strong> of the country it struck. Red means poor. Blue means rich.</p>
-          <p>The pattern snaps into focus.</p>
-        </div>
-        <div class="step" data-step="mag-4">
-          <p><strong>GDP per capita correlates with deaths far more strongly than magnitude does</strong> (r = −0.47 vs r = 0.22). Haiti's M7.0 killed 222,000. Chile's M8.8 killed 562.</p>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- ===================== SECTION 3: GAPMINDER ===================== -->
-  <section class="section section-scrolly" id="gapminder">
-    <div class="scrolly">
-      <div class="scrolly-graphic">
-        <div class="chart-container" id="gapminder-chart">
-          <div class="gapminder-controls">
-            <button class="btn-play" id="gapminder-play">▶ Play</button>
-            <input type="range" class="year-slider" id="gapminder-slider" min="1960" max="2025" value="1960">
-            <span class="year-display" id="gapminder-year">1960</span>
-          </div>
-        </div>
-      </div>
-      <div class="scrolly-text">
-        <div class="step" data-step="gap-1">
-          <h2>Wealth Protects — Year by Year</h2>
-          <p>This Gapminder-style chart shows the relationship between <strong>GDP per capita</strong> and <strong>deaths per earthquake event</strong>, animated across decades.</p>
-          <p>Each bubble is a country. Size = number of events. Color = world region.</p>
-        </div>
-        <div class="step" data-step="gap-2">
-          <p>Press <strong>Play</strong> to watch the pattern unfold from 1960 to today. Wealthier countries consistently cluster toward the bottom — fewer deaths per event.</p>
-        </div>
-        <div class="step" data-step="gap-3">
-          <p>Click any bubble to <strong>pin it</strong> and trace its trajectory over time. Watch how countries move as their economies develop.</p>
-        </div>
-        <div class="step" data-step="gap-4">
-          <p>Key moments stand out: <strong>1976 Tangshan</strong> (242,000 dead), <strong>2004 Indian Ocean</strong>, <strong>2010 Haiti</strong>, <strong>2023 Turkey-Syria</strong>. Each a devastating outlier — all in lower-income contexts.</p>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- ===================== SECTION 4: CORRELATIONS ===================== -->
   <section class="section section-scrolly" id="correlations">
@@ -180,14 +126,11 @@
       </div>
       <div class="scrolly-text">
         <div class="step" data-step="corr-1">
-          <h2>It's Not Just Money</h2>
-          <p>GDP is the strongest single predictor. But earthquake vulnerability is <strong>multi-dimensional</strong>. Let's look at all the factors together.</p>
+          <h2>The countries' wealth is related to earthquake mortality</h2>
+          <p>We can see several predictors of deaths during earthquakes - including GDP, HDI (Human Development Index), and Hospital Beds. Let's look at all the factors together.</p>
         </div>
         <div class="step" data-step="corr-2">
-          <p>Each small chart plots one indicator against deaths per event. <strong>GDP</strong> (r = −0.47), <strong>HDI</strong> (r = −0.37), and <strong>hospital beds</strong> (r = −0.35) all show strong negative correlations.</p>
-        </div>
-        <div class="step" data-step="corr-3">
-          <p><strong>Brush over any chart</strong> to highlight the same countries across all plots. This reveals which nations are consistently vulnerable — and which are consistently protected.</p>
+          <p>Each small chart plots one indicator against deaths per event. <strong>GDP</strong>, <strong>HDI</strong>, and <strong>hospital beds</strong> all show strong negative correlations - the r values are displayed on each chart.</p>
         </div>
       </div>
     </div>
@@ -222,26 +165,6 @@
     </div>
   </section>
 
-  <!-- ===================== SECTION 6: TIMELINE ===================== -->
-  <section class="section section-scrolly" id="timeline">
-    <div class="scrolly">
-      <div class="scrolly-graphic">
-        <div class="chart-container" id="timeline-chart"></div>
-      </div>
-      <div class="scrolly-text">
-        <div class="step" data-step="time-1">
-          <h2>66 Years of Earthquakes</h2>
-          <p>Every significant earthquake from 1960 to 2026, organized by <strong>income group</strong> of the country it struck. Circle size shows deaths.</p>
-        </div>
-        <div class="step" data-step="time-2">
-          <p>The deadliest events — <strong>the largest circles</strong> — cluster overwhelmingly in low and lower-middle income countries.</p>
-        </div>
-        <div class="step" data-step="time-3">
-          <p>High-income countries experience just as many earthquakes. But their circles stay small. <strong>Wealth doesn't prevent earthquakes — it prevents death.</strong></p>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- ===================== SECTION 7: TAKEAWAY ===================== -->
   <section class="section section-takeaway" id="takeaway">
