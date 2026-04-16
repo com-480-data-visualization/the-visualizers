@@ -32,6 +32,8 @@
   font-size: 1.15rem;
   color: rgba(255,255,255,0.65);
   font-weight: 300;
+  margin-left: auto;
+  margin-right: auto;
   opacity: 0;
   animation: fadeIn 1s ease 0.8s forwards;
 }

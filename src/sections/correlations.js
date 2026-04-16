@@ -1,31 +1,39 @@
 import * as d3 from 'd3';
 import { pearsonR } from '../utils/data-transforms.js';
-import { showTooltip, moveTooltip, hideTooltip, countryTooltipHTML } from '../components/tooltip.js';
+import { showTooltip, moveTooltip, hideTooltip, earthquakeTooltipHTML, countryTooltipHTML } from '../components/tooltip.js';
 
 let svg, g, cells;
-let countriesData;
+let eventsData, countriesData;
 let selectedCountries = new Set();
 let width, height;
 
-// Matches the notebook cell-50 correlation matrix (EDA section 5.6):
-//   country_agg filtered to events >= 5,
-//   x = raw country-aggregated indicator (no log transform),
-//   y = log10(clip(deaths_per_event, 0.01)).
-// The same methodology is applied to all six panels so the r values reproduce
-// the "Log deaths/event" column of the notebook's correlation matrix.
+// Each panel matches the granularity the notebook uses for that variable:
+//
+//   Magnitude — notebook cell-48 (EDA section 5.5):
+//     deadly = eq[eq['deaths'] > 0]
+//     stats.pearsonr(deadly['mag'], np.log10(deadly['deaths']))   → r ≈ 0.33
+//
+//   GDP, HDI, hospital beds, urban %, pop density — notebook cell-50 (EDA section 5.6):
+//     country_agg = eq.groupby('country_wb').agg(...).query('events >= 5')
+//     y = np.log10(country_agg['deaths_per_event'].clip(lower=0.01))
+//     r = pearson(country_agg[indicator], y)
+//
+// Cross-panel highlighting keys on country name so hovering a country dot also
+// highlights all of that country's event dots in the magnitude panel (and vice versa).
 const INDICATORS = [
-  { key: 'avg_gdp',           label: 'GDP per capita'   },
-  { key: 'hdi',               label: 'HDI'              },
-  { key: 'avg_hospital_beds', label: 'Hospital beds/1K' },
-  { key: 'avg_urban_pct',     label: 'Urban %'          },
-  { key: 'avg_pop_density',   label: 'Pop. density'     },
-  { key: 'avg_mag',           label: 'Avg magnitude'    },
+  { source: 'country', key: 'avg_gdp',           label: 'GDP per capita'   },
+  { source: 'country', key: 'hdi',               label: 'HDI'              },
+  { source: 'country', key: 'avg_hospital_beds', label: 'Hospital beds/1K' },
+  { source: 'country', key: 'avg_urban_pct',     label: 'Urban %'          },
+  { source: 'country', key: 'avg_pop_density',   label: 'Pop. density'     },
+  { source: 'event',   key: 'mag',               label: 'Magnitude'        },
 ];
 
 const DEATHS_CLIP = 0.01;
 const logDeathsPerEvent = (d) => Math.log10(Math.max(d.deaths_per_event, DEATHS_CLIP));
 
-export function initCorrelations(countries) {
+export function initCorrelations(earthquakes, countries) {
+  eventsData = earthquakes.filter(d => d.deaths != null && d.deaths > 0);
   countriesData = countries.filter(d => d.events >= 5);
 
   const container = document.getElementById('correlations-chart');
@@ -57,10 +65,13 @@ function renderGrid() {
     const plotW = cellW - pad.left - pad.right;
     const plotH = cellH - pad.top - pad.bottom;
 
-    const validData = countriesData.filter(d => d[indicator.key] != null && d.deaths_per_event != null);
+    const isEvent = indicator.source === 'event';
+    const baseData = isEvent ? eventsData : countriesData;
+    const getY = isEvent ? (d) => Math.log10(d.deaths) : logDeathsPerEvent;
+    const validData = baseData.filter(d => d[indicator.key] != null);
 
     const xVals = validData.map(d => d[indicator.key]);
-    const yVals = validData.map(logDeathsPerEvent);
+    const yVals = validData.map(getY);
     const r = pearsonR(xVals, yVals);
 
     const cellG = g.append('g')
@@ -104,18 +115,22 @@ function renderGrid() {
       .attr('class', 'axis')
       .call(d3.axisLeft(yScale).ticks(4).tickSize(3));
 
+    const baseOpacity = isEvent ? 0.35 : 0.55;
+    const baseR = isEvent ? 3 : 4;
+
     const dotsG = plotG.selectAll('.corr-dot')
       .data(validData)
       .join('circle')
       .attr('class', 'corr-dot')
       .attr('cx', d => xScale(d[indicator.key]))
-      .attr('cy', d => yScale(logDeathsPerEvent(d)))
-      .attr('r', 4)
+      .attr('cy', d => yScale(getY(d)))
+      .attr('r', baseR)
       .attr('fill', '#1a1a2e')
-      .attr('opacity', 0.55)
+      .attr('opacity', baseOpacity)
       .attr('stroke', 'none')
       .on('mouseenter', (event, d) => {
-        showTooltip(countryTooltipHTML(d), event);
+        const html = isEvent ? earthquakeTooltipHTML(d) : countryTooltipHTML(d);
+        showTooltip(html, event);
         highlightCountry(d.country, true);
       })
       .on('mousemove', moveTooltip)
@@ -124,7 +139,7 @@ function renderGrid() {
         highlightCountry(d.country, false);
       });
 
-    return { cellG, plotG, dotsG, xScale, yScale, indicator, validData };
+    return { cellG, plotG, dotsG, xScale, yScale, indicator, validData, isEvent, getY, baseOpacity, baseR };
   });
 
   cells.forEach(cell => {
@@ -142,7 +157,7 @@ function renderGrid() {
         selectedCountries.clear();
         cell.validData.forEach(d => {
           const cx = cell.xScale(d[cell.indicator.key]);
-          const cy = cell.yScale(logDeathsPerEvent(d));
+          const cy = cell.yScale(cell.getY(d));
           if (cx >= x0 && cx <= x1 && cy >= y0 && cy <= y1) {
             selectedCountries.add(d.country);
           }
@@ -161,13 +176,13 @@ function highlightCountry(country, on) {
     cell.dotsG
       .attr('opacity', d => {
         if (on && d.country === country) return 1;
-        if (!on && selectedCountries.size === 0) return 0.55;
+        if (!on && selectedCountries.size === 0) return cell.baseOpacity;
         if (selectedCountries.has(d.country)) return 0.8;
-        return 0.55;
+        return cell.baseOpacity;
       })
       .attr('r', d => {
-        if (on && d.country === country) return 5;
-        return 3.5;
+        if (on && d.country === country) return cell.baseR + 1.5;
+        return cell.baseR;
       })
       .attr('stroke', d => {
         if (on && d.country === country) return '#1a1a2e';
@@ -186,8 +201,8 @@ function updateHighlights() {
   cells.forEach(cell => {
     cell.dotsG
       .transition().duration(200)
-      .attr('opacity', d => selectedCountries.size === 0 ? 0.35 : selectedCountries.has(d.country) ? 0.85 : 0.08)
-      .attr('r', d => selectedCountries.has(d.country) ? 5 : 3.5)
+      .attr('opacity', d => selectedCountries.size === 0 ? cell.baseOpacity : selectedCountries.has(d.country) ? 0.85 : 0.06)
+      .attr('r', d => selectedCountries.has(d.country) ? cell.baseR + 1 : cell.baseR)
       .attr('stroke', d => selectedCountries.has(d.country) ? '#1a1a2e' : 'none')
       .attr('stroke-width', d => selectedCountries.has(d.country) ? 1 : 0);
   });

@@ -19,7 +19,7 @@ async function main() {
   // Initialize all sections
   initHook(earthquakes);
   await initGlobe(earthquakes);
-  initCorrelations(countries);
+  initCorrelations(earthquakes, countries);
   initComparison(earthquakes, countries);
   initTakeaway();
 
