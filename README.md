@@ -71,7 +71,10 @@ This dataset has not been used in any prior EPFL course by our team.
 ## Milestone 2 (17th April, 5pm)
 
 **10% of the final grade**
+
 Available in Milestones/Milestone2.pdf
+
+Website: com-480-data-visualization.github.io/the-visualizers/
 
 ## Milestone 3 (29th May, 5pm)
 
