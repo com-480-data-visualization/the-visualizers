@@ -24,7 +24,8 @@
       <div class="nav-links">
         <a href="#hook" class="nav-link active" data-section="0">The Question</a>
         <a href="#globe" class="nav-link" data-section="1">Where</a>
-
+        <a href="#factors" class="nav-link" data-section="2">Gap</a>
+        <a href="#profiles" class="nav-link" data-section="3">Profiles</a>
         <a href="#correlations" class="nav-link" data-section="4">The Factors</a>
         <a href="#comparison" class="nav-link" data-section="5">Compare</a>
       </div>
@@ -117,6 +118,54 @@
   </section>
 
 
+
+  <!-- ===================== SECTION 2: FACTORS (parallel coordinates) ===================== -->
+  <section class="section section-scrolly" id="factors">
+    <div class="scrolly">
+      <div class="scrolly-graphic">
+        <div class="chart-container" id="factors-chart"></div>
+      </div>
+      <div class="scrolly-text">
+        <div class="step" data-step="factors-1">
+          <h2>One axis. One story.</h2>
+          <p>Each circle is an earthquake-prone country, placed on a single axis by its <strong>average deaths per earthquake</strong>. Circle size = average magnitude. Color = World Bank income group.</p>
+        </div>
+        <div class="step" data-step="factors-2">
+          <p>The <strong>lower-income countries</strong> cluster on the right — Haiti, Afghanistan, Nepal, Pakistan, Iran. Hundreds to thousands of deaths per event.</p>
+        </div>
+        <div class="step" data-step="factors-3">
+          <p>The <strong>high-income countries</strong> sit on the left — Japan, Chile, New Zealand, Italy, the US. Many fewer deaths, despite comparable <em>or larger</em> average magnitudes.</p>
+        </div>
+        <div class="step" data-step="factors-4">
+          <p>Notice the circle sizes. <strong>Magnitude is scattered across the whole axis.</strong> Wealth sorts; geology doesn't. Hover any country for its full profile.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SECTION 3: PROFILES (parallel coordinates) ===================== -->
+  <section class="section section-scrolly" id="profiles">
+    <div class="scrolly">
+      <div class="scrolly-graphic">
+        <div class="chart-container" id="profiles-chart"></div>
+      </div>
+      <div class="scrolly-text">
+        <div class="step" data-step="profiles-1">
+          <h2>Follow the profile</h2>
+          <p>Same countries, seven dimensions. Each line threads one country through <strong>GDP, HDI, hospital beds, urban %, density, average magnitude</strong> and ends on <strong>deaths per event</strong>. Two colors: <span style="color:#10b981;font-weight:600">green</span> for high-income, <span style="color:#dc2626;font-weight:600">red</span> for low &amp; lower-middle income.</p>
+        </div>
+        <div class="step" data-step="profiles-2">
+          <p>Follow the <strong>red lines</strong>. They drop low on GDP, HDI, and hospital beds — and rise to the top of the deaths axis.</p>
+        </div>
+        <div class="step" data-step="profiles-3">
+          <p>Now the <strong>green lines</strong>: high on every development axis, low on deaths. Their average magnitude often matches — or exceeds — the red group.</p>
+        </div>
+        <div class="step" data-step="profiles-4">
+          <p>Hover any country for its full profile. The wealth-mortality gap isn't subtle — the two color bands rarely meet on the deaths axis.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- ===================== SECTION 4: CORRELATIONS ===================== -->
   <section class="section section-scrolly" id="correlations">

@@ -2,6 +2,8 @@ import * as d3 from 'd3';
 import { initScrollManager } from './utils/scroll-manager.js';
 import { initHook } from './sections/hook.js';
 import { initGlobe, onGlobeStep } from './sections/globe.js';
+import { initFactors, onFactorsStep } from './sections/factors.js';
+import { initProfiles, onProfilesStep } from './sections/profiles.js';
 import { initCorrelations, onCorrelationStep } from './sections/correlations.js';
 import { initComparison } from './sections/comparison.js';
 import { initTakeaway } from './sections/takeaway.js';
@@ -19,6 +21,8 @@ async function main() {
   // Initialize all sections
   initHook(earthquakes);
   await initGlobe(earthquakes);
+  initFactors(countries);
+  initProfiles(countries);
   initCorrelations(earthquakes, countries);
   initComparison(earthquakes, countries);
   initTakeaway();
@@ -30,6 +34,20 @@ async function main() {
       onStepEnter: ({ element }) => {
         const step = element.dataset.step;
         onGlobeStep(step);
+      },
+    },
+    {
+      id: 'factors',
+      onStepEnter: ({ element }) => {
+        const step = element.dataset.step;
+        onFactorsStep(step);
+      },
+    },
+    {
+      id: 'profiles',
+      onStepEnter: ({ element }) => {
+        const step = element.dataset.step;
+        onProfilesStep(step);
       },
     },
     {
