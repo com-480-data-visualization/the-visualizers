@@ -213,6 +213,102 @@
   pointer-events: none;
 }
 
+/* ===== PARALLEL COORDINATES (PROFILES) ===== */
+.pc-line {
+  cursor: pointer;
+  transition: stroke-width 0.15s ease, opacity 0.15s ease;
+}
+
+.pc-axis path,
+.pc-axis line {
+  stroke: #bbb;
+  shape-rendering: crispEdges;
+}
+
+.pc-axis text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  fill: #888;
+}
+
+.pc-axis-label {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  fill: #333;
+}
+
+.pc-brush .selection {
+  fill: rgba(26, 26, 46, 0.12);
+  stroke: #1a1a2e;
+  stroke-width: 1;
+}
+
+.pc-brush .handle {
+  fill: rgba(26, 26, 46, 0.3);
+}
+
+.pc-country-label {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.pc-legend-label {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 11px;
+  fill: #555;
+}
+
+/* ===== BEESWARM (FACTORS) ===== */
+.beeswarm-dot {
+  cursor: pointer;
+}
+
+.beeswarm-guide {
+  stroke: #e5e5e5;
+  stroke-width: 1;
+}
+
+.beeswarm-axis path,
+.beeswarm-axis line {
+  stroke: #bbb;
+}
+
+.beeswarm-axis text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  fill: #777;
+}
+
+.beeswarm-axis-title {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12px;
+  fill: #555;
+  font-weight: 500;
+}
+
+.beeswarm-endlabel {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.beeswarm-label {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  fill: #222;
+  pointer-events: none;
+}
+
+.beeswarm-legend-text {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 11px;
+  fill: #555;
+}
+
 /* ===== CORRELATION SMALL MULTIPLES ===== */
 .corr-cell {
   cursor: pointer;
