@@ -28,6 +28,48 @@ export function aggregateByDecade(earthquakes) {
   return Array.from(decades.values()).sort((a, b) => a.decade - b.decade);
 }
 
+// Per-country, per-decade aggregation for the Gapminder-style decades scatter.
+// For each (country × decade) where the country had at least one fatal event with
+// gdp_pc data in that decade, emit one frame: mean gdp_pc, deaths-per-event (mean
+// deaths across that decade's events), and the event count. income_group / region
+// are carried from the most recent event in the decade (they're effectively static).
+export function aggregateByCountryDecade(earthquakes) {
+  const byKey = new Map();
+  for (const eq of earthquakes) {
+    if (!eq.country || eq.gdp_pc == null || eq.year == null) continue;
+    if (eq.deaths == null || eq.deaths <= 0) continue;
+    const decade = Math.floor(eq.year / 10) * 10;
+    const key = `${eq.country}__${decade}`;
+    if (!byKey.has(key)) {
+      byKey.set(key, {
+        country: eq.country,
+        country_code: eq.country_code,
+        income_group: eq.income_group,
+        region: eq.region,
+        decade,
+        _gdpSum: 0, _gdpN: 0,
+        _deathsSum: 0,
+        n_events: 0,
+      });
+    }
+    const a = byKey.get(key);
+    a._gdpSum += eq.gdp_pc;
+    a._gdpN += 1;
+    a._deathsSum += eq.deaths;
+    a.n_events += 1;
+  }
+  return Array.from(byKey.values()).map(a => ({
+    country: a.country,
+    country_code: a.country_code,
+    income_group: a.income_group,
+    region: a.region,
+    decade: a.decade,
+    mean_gdp_pc: a._gdpSum / a._gdpN,
+    deaths_per_event: a._deathsSum / a.n_events,
+    n_events: a.n_events,
+  }));
+}
+
 export function pearsonR(x, y) {
   const n = x.length;
   if (n < 3) return null;

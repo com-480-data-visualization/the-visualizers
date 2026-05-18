@@ -395,31 +395,34 @@
   fill: #666;
 }
 
-/* ===== TIMELINE ===== */
-.timeline-band-label {
+/* ===== DECADES (Gapminder GDP vs deaths across decades) =====
+   Reuses .gapminder-bubble and .gapminder-year-label from above. */
+.decades-legend-text {
   font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 11px;
   fill: #555;
 }
 
-.timeline-dot {
+.decades-replay-btn {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #1a1a2e;
+  background: #fff;
+  border: 1px solid #d0d0d8;
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
   cursor: pointer;
-  transition: opacity 0.2s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  transition: background 0.15s ease, border-color 0.15s ease;
 }
 
-.timeline-dot:hover {
-  stroke: #1a1a2e;
-  stroke-width: 2;
-}
-
-.income-band {
-  fill: rgba(0,0,0,0.02);
-  stroke: rgba(0,0,0,0.05);
-}
-
-.income-band:nth-child(odd) {
-  fill: rgba(0,0,0,0.04);
+.decades-replay-btn:hover {
+  background: #f5f5fa;
+  border-color: #1a1a2e;
 }
 
 /* ===== BRUSH ===== */
