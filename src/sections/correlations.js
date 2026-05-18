@@ -55,7 +55,7 @@ function renderGrid() {
   const rows = 2;
   const cellW = (width - 40) / cols;
   const cellH = (height - 40) / rows;
-  const pad = { top: 28, right: 10, bottom: 30, left: 40 };
+  const pad = { top: 38, right: 10, bottom: 30, left: 40 };
 
   cells = INDICATORS.map((indicator, i) => {
     const col = i % cols;
@@ -86,15 +86,15 @@ function renderGrid() {
     cellG.append('text')
       .attr('class', 'corr-indicator-label')
       .attr('x', pad.left + plotW / 2)
-      .attr('y', 16)
+      .attr('y', 13)
       .attr('text-anchor', 'middle')
       .text(indicator.label);
 
     cellG.append('text')
       .attr('class', 'corr-r-value')
-      .attr('x', cellW - pad.right - 15)
-      .attr('y', 18)
-      .attr('text-anchor', 'end')
+      .attr('x', pad.left + plotW / 2)
+      .attr('y', 27)
+      .attr('text-anchor', 'middle')
       .attr('fill', r < -0.3 ? '#dc2626' : r < -0.1 ? '#f59e0b' : r > 0.3 ? '#2563eb' : '#666')
       .text(`r = ${r?.toFixed(2)}`);
 
