@@ -84,6 +84,34 @@ export async function initGlobe(earthquakes) {
     .on('mousemove', (event) => moveTooltip(event))
     .on('mouseleave', hideTooltip);
 
+  // Controls panel
+  const controls = d3.select(container).append('div')
+    .attr('id', 'globe-controls')
+    .attr('class', 'globe-controls')
+    .style('display', 'none');
+
+  const sizeGroup = controls.append('div').attr('class', 'ctrl-group');
+  sizeGroup.append('span').attr('class', 'ctrl-label').text('Dot size');
+  [['uniform', 'Uniform'], ['magnitude', 'Magnitude']].forEach(([val, label]) => {
+    sizeGroup.append('button')
+      .attr('class', val === 'uniform' ? 'ctrl-btn active' : 'ctrl-btn')
+      .attr('data-mode', 'size')
+      .attr('data-value', val)
+      .text(label)
+      .on('click', () => { sizeMode = val; syncButtons(); render(); });
+  });
+
+  const colorGroup = controls.append('div').attr('class', 'ctrl-group');
+  colorGroup.append('span').attr('class', 'ctrl-label').text('Color');
+  [['uniform', 'Uniform'], ['deaths', 'Deaths']].forEach(([val, label]) => {
+    colorGroup.append('button')
+      .attr('class', val === 'uniform' ? 'ctrl-btn active' : 'ctrl-btn')
+      .attr('data-mode', 'color')
+      .attr('data-value', val)
+      .text(label)
+      .on('click', () => { colorMode = val; syncButtons(); render(); });
+  });
+
   // Drag rotation
   const drag = d3.drag()
     .on('start', () => { if (rotationTimer) rotationTimer.stop(); })
@@ -104,6 +132,16 @@ function startAutoRotate() {
     const r = projection.rotate();
     projection.rotate([r[0] + 0.08, r[1]]);
     render();
+  });
+}
+
+function syncButtons() {
+  d3.selectAll('#globe-controls .ctrl-btn').each(function() {
+    const btn = d3.select(this);
+    const mode = btn.attr('data-mode');
+    const val = btn.attr('data-value');
+    const active = (mode === 'size' && val === sizeMode) || (mode === 'color' && val === colorMode);
+    btn.classed('active', active);
   });
 }
 
@@ -141,22 +179,29 @@ function render() {
 export function onGlobeStep(stepId) {
   currentStep = stepId;
 
+  const panel = document.getElementById('globe-controls');
+
   switch (stepId) {
     case 'globe-1':
       sizeMode = 'uniform';
       colorMode = 'uniform';
+      if (panel) panel.style.display = 'none';
       break;
     case 'globe-2':
       sizeMode = 'magnitude';
       colorMode = 'uniform';
+      if (panel) panel.style.display = 'flex';
       break;
     case 'globe-3':
       sizeMode = 'magnitude';
       colorMode = 'deaths';
+      if (panel) panel.style.display = 'flex';
       break;
     case 'globe-4':
       sizeMode = 'magnitude';
       colorMode = 'deaths';
+      if (panel) panel.style.display = 'flex';
+      syncButtons();
       // Rotate to Pacific
       if (rotationTimer) rotationTimer.stop();
       d3.transition().duration(2000).tween('rotate', () => {
@@ -169,5 +214,6 @@ export function onGlobeStep(stepId) {
       return;
   }
 
+  syncButtons();
   render();
 }

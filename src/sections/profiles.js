@@ -103,18 +103,31 @@ function render() {
     .ease(d3.easeCubicOut)
     .attr('opacity', 0.75);
 
-  // Country labels at the right (next to deaths/event axis)
+  // Country labels at the right — de-collide by nudging overlapping labels apart
+  const minGap = 13;
+  const labelData = data
+    .map(d => ({ d, y: yScales['deaths_per_event'](d.deaths_per_event) }))
+    .sort((a, b) => a.y - b.y);
+  for (let i = 1; i < labelData.length; i++) {
+    const gap = labelData[i].y - labelData[i - 1].y;
+    if (gap < minGap) {
+      const shift = (minGap - gap) / 2;
+      labelData[i - 1].y -= shift;
+      labelData[i].y += shift;
+    }
+  }
+
   g.append('g').attr('class', 'pc-labels')
     .selectAll('text')
-    .data(data)
+    .data(labelData)
     .join('text')
     .attr('class', 'pc-country-label')
     .attr('x', xScale('deaths_per_event') + 8)
-    .attr('y', d => yScales['deaths_per_event'](d.deaths_per_event))
+    .attr('y', d => d.y)
     .attr('dy', '0.32em')
-    .attr('fill', d => BUCKET_COLORS[d.bucket])
+    .attr('fill', d => BUCKET_COLORS[d.d.bucket])
     .style('opacity', 0)
-    .text(d => displayName(d.country))
+    .text(d => displayName(d.d.country))
     .transition().delay(800).duration(600)
     .style('opacity', 1);
 
@@ -139,14 +152,14 @@ function render() {
       .text(dim.label);
   });
 
-  renderLegend(margin);
+  renderLegend(plotH);
 }
 
-function renderLegend(margin) {
+function renderLegend(plotH) {
   const categories = ['High income', 'Low & lower-middle income'];
-  const legend = svg.append('g')
+  const legend = g.append('g')
     .attr('class', 'pc-legend')
-    .attr('transform', `translate(${margin.left}, 24)`);
+    .attr('transform', `translate(0, ${plotH + 22})`);
 
   const item = legend.selectAll('g')
     .data(categories)
