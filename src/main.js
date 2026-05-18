@@ -5,6 +5,7 @@ import { initGlobe, onGlobeStep } from './sections/globe.js';
 import { initFactors, onFactorsStep } from './sections/factors.js';
 import { initProfiles, onProfilesStep } from './sections/profiles.js';
 import { initCorrelations, onCorrelationStep } from './sections/correlations.js';
+import { initDecades, onDecadesStep } from './sections/decades.js';
 import { initComparison } from './sections/comparison.js';
 import { initTakeaway } from './sections/takeaway.js';
 
@@ -24,6 +25,7 @@ async function main() {
   initFactors(countries);
   initProfiles(countries);
   initCorrelations(earthquakes, countries);
+  initDecades(earthquakes);
   initComparison(earthquakes, countries);
   initTakeaway();
 
@@ -55,6 +57,13 @@ async function main() {
       onStepEnter: ({ element }) => {
         const step = element.dataset.step;
         onCorrelationStep(step);
+      },
+    },
+    {
+      id: 'decades',
+      onStepEnter: ({ element }) => {
+        const step = element.dataset.step;
+        onDecadesStep(step);
       },
     }
   ]);
