@@ -172,14 +172,16 @@ function render() {
     .style('opacity', 1)
     .attr('transform', d => `translate(${d.x},${d.y})`);
 
-  renderLegend(margin);
+  renderLegend(plotW, axisY);
 }
 
-function renderLegend(margin) {
+function renderLegend(plotW, axisY) {
+  const legendY = axisY + 70;
+
   const categories = ['High income', 'Low & lower-middle income'];
-  const legend = svg.append('g')
+  const legend = g.append('g')
     .attr('class', 'beeswarm-legend')
-    .attr('transform', `translate(${margin.left}, 24)`);
+    .attr('transform', `translate(0, ${legendY})`);
 
   const item = legend.selectAll('g.beeswarm-income-item')
     .data(categories)
@@ -198,9 +200,9 @@ function renderLegend(margin) {
     .text(d => d);
 
   // Size legend (magnitude)
-  const sizeLegend = svg.append('g')
+  const sizeLegend = g.append('g')
     .attr('class', 'beeswarm-size-legend')
-    .attr('transform', `translate(${width - margin.right - 160}, 24)`);
+    .attr('transform', `translate(${plotW - 160}, ${legendY})`);
 
   const sizeStops = [
     { mag: d3.min(data, d => d.avg_mag), label: 'low mag' },
@@ -213,7 +215,7 @@ function renderLegend(margin) {
     .text('Size = avg magnitude');
 
   sizeStops.forEach((s, i) => {
-    const cx = 105 + i * 36;
+    const cx = 145 + i * 36;
     sizeLegend.append('circle')
       .attr('cx', cx).attr('cy', 8)
       .attr('r', rScale(s.mag) * 0.45)

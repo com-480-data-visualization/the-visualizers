@@ -146,6 +146,57 @@
   stroke-width: 0.3;
 }
 
+/* Globe controls overlay */
+.globe-controls {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  background: rgba(15, 15, 15, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  display: flex;
+  gap: 1rem;
+  font-size: 0.75rem;
+  align-items: center;
+  z-index: 10;
+  pointer-events: all;
+}
+
+.ctrl-group {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.ctrl-label {
+  color: #888;
+  margin-right: 0.2rem;
+  white-space: nowrap;
+}
+
+.ctrl-btn {
+  background: transparent;
+  border: 1px solid #444;
+  color: #ccc;
+  border-radius: 4px;
+  padding: 2px 8px;
+  cursor: pointer;
+  font-size: 0.72rem;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.ctrl-btn:hover {
+  border-color: #888;
+  color: #fff;
+}
+
+.ctrl-btn.active {
+  background: #dc2626;
+  border-color: #dc2626;
+  color: #fff;
+}
+
 .earthquake-dot {
   stroke: #fff;
   stroke-width: 0.5;
