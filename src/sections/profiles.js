@@ -3,11 +3,6 @@ import { showTooltip, moveTooltip, hideTooltip } from '../components/tooltip.js'
 import { displayName } from '../utils/constants.js';
 import { FEATURED, incomeBucket, BUCKET_COLORS } from './factors.js';
 
-// Parallel-coordinates plot for the same curated country sample as the beeswarm.
-// 7 axes (GDP → Deaths/event). Lines colored by simplified income bucket
-// (High income vs Low & lower-middle income). No brushing — scrollytelling
-// steps drive the opacity filter.
-
 let svg, g, width, height;
 let data;
 let xScale;
@@ -103,7 +98,6 @@ function render() {
     .ease(d3.easeCubicOut)
     .attr('opacity', 0.75);
 
-  // Country labels at the right — de-collide by nudging overlapping labels apart
   const minGap = 13;
   const labelData = data
     .map(d => ({ d, y: yScales['deaths_per_event'](d.deaths_per_event) }))
@@ -131,7 +125,6 @@ function render() {
     .transition().delay(800).duration(600)
     .style('opacity', 1);
 
-  // Axes
   const axisRoot = g.append('g').attr('class', 'pc-axes');
 
   DIMENSIONS.forEach(dim => {

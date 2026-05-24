@@ -5,8 +5,8 @@ import { showTooltip, moveTooltip, hideTooltip, earthquakeTooltipHTML } from '..
 
 let svg, projection, path, g, earthquakeData, worldData;
 let currentStep = 'globe-1';
-let colorMode = 'uniform'; // 'uniform' | 'deaths'
-let sizeMode = 'uniform';  // 'uniform' | 'magnitude'
+let colorMode = 'uniform';
+let sizeMode = 'uniform';
 let rotationTimer;
 let renderQueued = false;
 let dotSelection;
@@ -16,7 +16,8 @@ let globeCenter = [0, 0];
 let globeCx = 0;
 let globeCy = 0;
 let deathScale;
-const horizonMargin = 0.03; // radians: hide dots within this margin of the horizon
+let globeVisible = true;
+const horizonMargin = 0.03;
 
 export async function initGlobe(earthquakes) {
   earthquakeData = earthquakes.filter(d => d.lat != null && d.lon != null);
@@ -46,20 +47,17 @@ export async function initGlobe(earthquakes) {
 
   deathScale = deathColorScale();
 
-  // Water
   svg.append('circle')
     .attr('class', 'globe-water')
     .attr('cx', cx)
     .attr('cy', cy)
     .attr('r', size / 2.2);
 
-  // Graticule
   graticuleSelection = svg.append('path')
     .datum(d3.geoGraticule()())
     .attr('class', 'globe-graticule')
     .attr('d', path);
 
-  // Land
   const countries = topojson.feature(worldData, worldData.objects.countries);
   g = svg.append('g');
 
@@ -69,7 +67,6 @@ export async function initGlobe(earthquakes) {
     .attr('class', 'globe-land')
     .attr('d', path);
 
-  // Earthquake dots
   const dots = svg.append('g').attr('class', 'earthquake-dots');
 
   dotSelection = dots.selectAll('.earthquake-dot')
@@ -91,7 +88,6 @@ export async function initGlobe(earthquakes) {
     .on('mousemove', (event) => moveTooltip(event))
     .on('mouseleave', hideTooltip);
 
-  // Controls panel
   const controls = d3.select(container).append('div')
     .attr('id', 'globe-controls')
     .attr('class', 'globe-controls')
@@ -119,7 +115,6 @@ export async function initGlobe(earthquakes) {
       .on('click', () => { colorMode = val; syncButtons(); render(); });
   });
 
-  // Drag rotation
   const drag = d3.drag()
     .on('start', () => { if (rotationTimer) rotationTimer.stop(); })
     .on('drag', (event) => {
@@ -130,14 +125,26 @@ export async function initGlobe(earthquakes) {
 
   svg.call(drag);
 
-  // Start auto-rotation
+  const globeSection = document.getElementById('globe');
+  if (globeSection) {
+    const observer = new IntersectionObserver(entries => {
+      globeVisible = entries[0].isIntersecting;
+      if (globeVisible && !rotationTimer) startAutoRotate();
+      else if (!globeVisible && rotationTimer) { rotationTimer.stop(); rotationTimer = null; }
+    }, { threshold: 0.05 });
+    observer.observe(globeSection);
+  }
+
   startAutoRotate();
 }
 
 function startAutoRotate() {
+  let lastTick = 0;
   rotationTimer = d3.timer(elapsed => {
+    if (elapsed - lastTick < 33) return;
+    lastTick = elapsed;
     const r = projection.rotate();
-    projection.rotate([r[0] + 0.08, r[1]]);
+    projection.rotate([r[0] + 0.15, r[1]]);
     scheduleRender();
   });
 }
@@ -163,27 +170,26 @@ function syncButtons() {
 
 function render() {
   globeCenter = projection.invert([globeCx, globeCy]);
+  const halfPi = Math.PI / 2 - horizonMargin;
 
   landSelection.attr('d', path);
   graticuleSelection.attr('d', path);
 
-  dotSelection
-    .attr('transform', d => {
-      const p = projection([d.lon, d.lat]);
-      return p ? `translate(${p[0]},${p[1]})` : 'translate(-100,-100)';
-    })
-    .attr('r', d => {
-      if (sizeMode === 'magnitude') return magRadius(d.mag, [1.5, 12]);
-      return 2;
-    })
-    .attr('fill', d => {
-      if (colorMode === 'deaths') return deathColor(d.deaths, deathScale);
-      return '#dc2626';
-    })
-    .attr('opacity', d => {
-      const dist = d3.geoDistance([d.lon, d.lat], globeCenter);
-      return dist > Math.PI / 2 - horizonMargin ? 0 : 0.65;
-    });
+  dotSelection.each(function(d) {
+    const dist = d3.geoDistance([d.lon, d.lat], globeCenter);
+    const hidden = dist > halfPi;
+    const el = this;
+    if (hidden) {
+      el.setAttribute('opacity', 0);
+      return;
+    }
+    const p = projection([d.lon, d.lat]);
+    if (!p) { el.setAttribute('opacity', 0); return; }
+    el.setAttribute('transform', `translate(${p[0]},${p[1]})`);
+    el.setAttribute('r', sizeMode === 'magnitude' ? magRadius(d.mag, [1.5, 12]) : 2);
+    el.setAttribute('fill', colorMode === 'deaths' ? deathColor(d.deaths, deathScale) : '#dc2626');
+    el.setAttribute('opacity', 0.65);
+  });
 }
 
 export function onGlobeStep(stepId) {
@@ -212,7 +218,6 @@ export function onGlobeStep(stepId) {
       colorMode = 'deaths';
       if (panel) panel.style.display = 'flex';
       syncButtons();
-      // Rotate to Pacific
       if (rotationTimer) rotationTimer.stop();
       d3.transition().duration(2000).tween('rotate', () => {
         const r = d3.interpolate(projection.rotate(), [-170, -10]);

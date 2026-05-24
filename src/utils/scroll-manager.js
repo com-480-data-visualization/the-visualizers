@@ -4,25 +4,21 @@ export function initScrollManager(sections) {
   const nav = document.getElementById('nav');
   const progressBar = document.getElementById('progress-bar');
 
-  // Show nav after scrolling past hook
   const hookHeight = document.getElementById('hook')?.offsetHeight || window.innerHeight;
 
+  let scrollRaf = false;
   window.addEventListener('scroll', () => {
-    // Progress bar
-    const scrollTop = window.scrollY;
-    const docHeight = document.body.scrollHeight - window.innerHeight;
-    const progress = (scrollTop / docHeight) * 100;
-    progressBar.style.width = `${progress}%`;
-
-    // Nav visibility
-    if (scrollTop > hookHeight * 0.8) {
-      nav.classList.add('visible');
-    } else {
-      nav.classList.remove('visible');
-    }
+    if (scrollRaf) return;
+    scrollRaf = true;
+    requestAnimationFrame(() => {
+      scrollRaf = false;
+      const scrollTop = window.scrollY;
+      const docHeight = document.body.scrollHeight - window.innerHeight;
+      progressBar.style.width = `${(scrollTop / docHeight) * 100}%`;
+      nav.classList.toggle('visible', scrollTop > hookHeight * 0.8);
+    });
   });
 
-  // Nav link active state
   const navLinks = document.querySelectorAll('.nav-link');
   const sectionEls = document.querySelectorAll('.section');
 
@@ -39,7 +35,6 @@ export function initScrollManager(sections) {
 
   sectionEls.forEach(s => sectionObserver.observe(s));
 
-  // Initialize scrollama for each scrollytelling section
   const scrollers = [];
 
   sections.forEach(({ id, onStepEnter, onStepExit }) => {
@@ -54,7 +49,6 @@ export function initScrollManager(sections) {
         debug: false,
       })
       .onStepEnter(response => {
-        // Mark active step
         const steps = container.querySelectorAll('.step');
         steps.forEach(s => s.classList.remove('is-active'));
         response.element.classList.add('is-active');
@@ -68,7 +62,6 @@ export function initScrollManager(sections) {
     scrollers.push(scroller);
   });
 
-  // Handle resize
   window.addEventListener('resize', () => {
     scrollers.forEach(s => s.resize());
   });

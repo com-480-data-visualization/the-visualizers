@@ -7,19 +7,6 @@ let eventsData, countriesData;
 let selectedCountries = new Set();
 let width, height;
 
-// Each panel matches the granularity the notebook uses for that variable:
-//
-//   Magnitude — notebook cell-48 (EDA section 5.5):
-//     deadly = eq[eq['deaths'] > 0]
-//     stats.pearsonr(deadly['mag'], np.log10(deadly['deaths']))   → r ≈ 0.33
-//
-//   GDP, HDI, hospital beds, urban %, pop density — notebook cell-50 (EDA section 5.6):
-//     country_agg = eq.groupby('country_wb').agg(...).query('events >= 5')
-//     y = np.log10(country_agg['deaths_per_event'].clip(lower=0.01))
-//     r = pearson(country_agg[indicator], y)
-//
-// Cross-panel highlighting keys on country name so hovering a country dot also
-// highlights all of that country's event dots in the magnitude panel (and vice versa).
 const INDICATORS = [
   { source: 'country', key: 'avg_gdp',           label: 'GDP per capita'   },
   { source: 'country', key: 'hdi',               label: 'HDI'              },
@@ -209,5 +196,4 @@ function updateHighlights() {
 }
 
 export function onCorrelationStep(stepId) {
-  // Steps just control narrative; chart is always interactive
 }

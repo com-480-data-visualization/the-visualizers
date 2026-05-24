@@ -5,34 +5,12 @@ import { fmtDollar, fmtDeaths } from '../utils/formats.js';
 import { addXAxis, addYAxis } from '../components/axis.js';
 import { showTooltip, moveTooltip, hideTooltip } from '../components/tooltip.js';
 
-// Gapminder-style log-log scatter: x = GDP per capita (decade mean for that country),
-// y = deaths per event (decade total / decade event count). One persistent dot per
-// country. The dots translate across decades; identity is stable. Income group is
-// the constant color encoding so the wealth axis is reinforced visually.
-//
-// To keep ~80 dots legible we layer three explicit aids on top of the cloud:
-//
-//   1. Per-decade median death lines — one thin horizontal dashed line per
-//      decade at y = median(deaths_per_event) across all countries with data
-//      that decade. Labelled on the right edge with the decade and value.
-//      The stack of seven horizontal levels descending vertically *is* the
-//      headline: progress on the y-axis, no wealth dimension involved.
-//
-//   2. Permanent labels for six anchor countries — Haiti, Nepal, Iran, Chile,
-//      US, Japan. The eye latches onto these as references; the rest of the
-//      cloud is ambient texture (still hoverable for identity).
-//
-//   3. (Country trails removed — they added clutter without telling the story.)
-
 const DECADES = [1960, 1970, 1980, 1990, 2000, 2010, 2020];
-const STEP_MS = 1400;     // per-decade transition in autoplay
-const FREEZE_MS = 900;    // duration of the explicit step-1 / step-2 transitions
+const STEP_MS = 1400;
+const FREEZE_MS = 900;
 const FADED_OPACITY = 0.15;
 const ACTIVE_OPACITY = 0.85;
 
-// Six named anchors. Same logic as the curated FEATURED_COUNTRIES set but
-// trimmed to the six that span the wealth axis most cleanly and have data
-// across enough decades for trails to read.
 const ANCHOR_COUNTRIES = new Set([
   'Haiti', 'Nepal', 'Iran, Islamic Rep.',
   'Chile', 'United States', 'Japan',
@@ -41,15 +19,14 @@ const ANCHOR_COUNTRIES = new Set([
 let svg, g, plotG, labelsG, medianG, decadeLabel, replayBtn;
 let xScale, yScale;
 let plotW, plotH;
-let countries;            // [{country, income_group, frames: Map<decade, frame>}]
-let decadeMedians;        // [{decade, deaths, y, n}] — y-only (no wealth dim)
+let countries;
+let decadeMedians;
 let currentDecade = null;
-let autoplayToken = 0;    // increments on every cancel; aborts in-flight setTimeouts
+let autoplayToken = 0;
 
 export function initDecades(earthquakes) {
   const flat = aggregateByCountryDecade(earthquakes);
 
-  // Index: country → { meta, frames: Map<decade, frame> }
   const byCountry = new Map();
   for (const row of flat) {
     if (!byCountry.has(row.country)) {
@@ -66,8 +43,6 @@ export function initDecades(earthquakes) {
   countries = Array.from(byCountry.values())
     .filter(c => c.frames.size > 0 && INCOME_COLORS[c.income_group]);
 
-  // Per-decade median of deaths-per-event. No wealth dimension — the median is
-  // a y-only value answering "what's a typical country-decade death toll?"
   decadeMedians = DECADES.map(decade => {
     const deaths = countries
       .map(c => c.frames.get(decade))
@@ -80,7 +55,6 @@ export function initDecades(earthquakes) {
     };
   });
 
-  // Build the chart
   const container = document.getElementById('decades-chart');
   const rect = container.getBoundingClientRect();
   const width = rect.width;
@@ -90,26 +64,17 @@ export function initDecades(earthquakes) {
     .attr('width', width)
     .attr('height', height);
 
-  // Right margin widened to host the per-decade median labels ("1960s · 156").
   const margin = { top: 40, right: 90, bottom: 60, left: 70 };
   plotW = width - margin.left - margin.right;
   plotH = height - margin.top - margin.bottom;
 
   g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
-  // Scales fixed across all decades so motion is comparable. Both log: deaths
-  // per event spans ~1 to >50,000 across country-decades; linear would crush
-  // 95% of the dots into the bottom strip and hide the progress motion.
-  // x-domain starts at $50 to fit the very poorest country-decades (1960s
-  // Afghanistan, Nepal, etc.); .clamp() pins anything below to the y-axis
-  // edge so no dot ever floats outside the plot area.
   xScale = d3.scaleLog().domain([50, 120000]).range([0, plotW]).clamp(true);
   yScale = d3.scaleLog().domain([1, 1_000_000]).range([plotH, 0]);
 
-  // Project each decade's median onto the y-axis.
   decadeMedians.forEach(m => { m.y = yScale(m.deaths); });
 
-  // Big translucent decade label in the background (reuses existing .gapminder-year-label)
   decadeLabel = g.append('text')
     .attr('class', 'gapminder-year-label')
     .attr('x', plotW - 20)
@@ -117,7 +82,6 @@ export function initDecades(earthquakes) {
     .attr('text-anchor', 'end')
     .text('');
 
-  // Axes
   addXAxis(g, xScale, plotH, 'GDP per capita (USD, log scale)', {
     tickValues: [50, 100, 500, 2000, 10000, 50000],
     tickFormat: fmtDollar,
@@ -127,7 +91,6 @@ export function initDecades(earthquakes) {
     tickFormat: fmtDeaths,
   });
 
-  // Plot group (dots).
   plotG = g.append('g').attr('class', 'decades-dots');
 
   plotG.selectAll('circle.gapminder-bubble')
@@ -149,7 +112,6 @@ export function initDecades(earthquakes) {
       hideTooltip();
     });
 
-  // Anchor-country labels (always visible).
   labelsG = g.append('g').attr('class', 'decades-labels').attr('pointer-events', 'none');
   const anchors = countries.filter(c => ANCHOR_COUNTRIES.has(c.country));
   labelsG.selectAll('text.gapminder-country-label')
@@ -162,9 +124,6 @@ export function initDecades(earthquakes) {
     .attr('opacity', 0)
     .text(d => displayName(d.country));
 
-  // Median levels: one horizontal dashed line per decade at its median death
-  // toll, plus a right-edge label "1960s · 156". Sits above the cloud so it
-  // always reads, but with low default opacity so it never fights the dots.
   medianG = g.append('g').attr('class', 'decades-median').attr('pointer-events', 'none');
 
   const medianRow = medianG.selectAll('g.decades-median-row')
@@ -192,7 +151,6 @@ export function initDecades(earthquakes) {
 
   renderLegend();
 
-  // Replay button (HTML, hidden until first autoplay completes)
   replayBtn = document.createElement('button');
   replayBtn.className = 'decades-replay-btn';
   replayBtn.textContent = '↻ Replay';
@@ -202,7 +160,6 @@ export function initDecades(earthquakes) {
   });
   container.appendChild(replayBtn);
 
-  // Land on the first decade so the chart shows something even before scroll triggers
   setDecade(1960, { animate: false });
   setMedianReveal(1960, { animate: false });
 }
@@ -222,7 +179,6 @@ function renderLegend() {
       .text(group);
   });
 
-  // One extra legend row for the per-decade median levels.
   const medianRow = legend.append('g')
     .attr('transform', `translate(0, ${INCOME_GROUPS.length * 18 + 6})`);
   medianRow.append('line')
@@ -235,8 +191,6 @@ function renderLegend() {
     .text('Decade median');
 }
 
-// Pick the right frame for `decade`: prefer the exact decade, otherwise the most
-// recent prior decade with data.
 function frameFor(country, decade) {
   if (country.frames.has(decade)) {
     return { frame: country.frames.get(decade), exact: true };
@@ -265,7 +219,6 @@ function setDecade(decade, { animate = true, durationMs = FREEZE_MS } = {}) {
   const dotTrans = animate ? dots.transition().duration(durationMs).ease(ease) : dots;
   dotTrans.attr('cx', xOf).attr('cy', yOf).attr('opacity', opOf);
 
-  // Anchor labels track their dot; offset above the circle.
   const labelTrans = animate ? labels.transition().duration(durationMs).ease(ease) : labels;
   labelTrans
     .attr('x', xOf)
@@ -277,9 +230,6 @@ function setDecade(decade, { animate = true, durationMs = FREEZE_MS } = {}) {
     });
 }
 
-// Reveal decade-median levels up to and including `upToDecade`. Past decades
-// fade to a subdued grey; the current decade gets full opacity and a thicker
-// line so it reads as "this is now". `null` hides everything.
 function setMedianReveal(upToDecade, { animate = true } = {}) {
   const dur = animate ? 400 : 0;
   const rows = medianG.selectAll('g.decades-median-row');
@@ -305,13 +255,12 @@ function playAutoplay() {
 
   if (replayBtn) replayBtn.style.display = 'none';
 
-  // Snap to 1960s instantly, then chain transitions through the rest.
   setDecade(DECADES[0], { animate: false });
   setMedianReveal(DECADES[0], { animate: false });
 
   let i = 1;
   function tick() {
-    if (myToken !== autoplayToken) return;     // aborted
+    if (myToken !== autoplayToken) return;
     if (i >= DECADES.length) {
       if (replayBtn) replayBtn.style.display = 'inline-block';
       return;
@@ -345,17 +294,14 @@ function tooltipHTML(d) {
 
 export function onDecadesStep(stepId) {
   if (!plotG) return;
-  // Any step change cancels an in-flight autoplay and hides the replay button.
   autoplayToken += 1;
   if (replayBtn) replayBtn.style.display = 'none';
 
   if (stepId === 'decades-1') {
     setDecade(1960, { animate: true });
-    // Step 1: starting median dot only, no trend line yet.
     setMedianReveal(1960, { animate: true });
   } else if (stepId === 'decades-2') {
     setDecade(2020, { animate: true });
-    // Step 2: full straight-line trend through six decades of medians.
     setMedianReveal(2020, { animate: true });
   } else if (stepId === 'decades-3') {
     playAutoplay();

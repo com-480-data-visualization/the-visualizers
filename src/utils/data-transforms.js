@@ -28,11 +28,6 @@ export function aggregateByDecade(earthquakes) {
   return Array.from(decades.values()).sort((a, b) => a.decade - b.decade);
 }
 
-// Per-country, per-decade aggregation for the Gapminder-style decades scatter.
-// For each (country × decade) where the country had at least one fatal event with
-// gdp_pc data in that decade, emit one frame: mean gdp_pc, deaths-per-event (mean
-// deaths across that decade's events), and the event count. income_group / region
-// are carried from the most recent event in the decade (they're effectively static).
 export function aggregateByCountryDecade(earthquakes) {
   const byKey = new Map();
   for (const eq of earthquakes) {

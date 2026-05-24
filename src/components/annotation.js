@@ -1,7 +1,6 @@
 export function addAnnotation(g, { x, y, dx, dy, text, color = '#555' }) {
   const ann = g.append('g').attr('class', 'annotation');
 
-  // Line from point to label
   ann.append('line')
     .attr('class', 'annotation-line')
     .attr('x1', x)
@@ -10,7 +9,6 @@ export function addAnnotation(g, { x, y, dx, dy, text, color = '#555' }) {
     .attr('y2', y + dy)
     .attr('stroke', color);
 
-  // Text label
   ann.append('text')
     .attr('class', 'annotation-text')
     .attr('x', x + dx)
@@ -19,7 +17,6 @@ export function addAnnotation(g, { x, y, dx, dy, text, color = '#555' }) {
     .attr('fill', color)
     .text(text);
 
-  // Small dot at the data point
   ann.append('circle')
     .attr('cx', x)
     .attr('cy', y)

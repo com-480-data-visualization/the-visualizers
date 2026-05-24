@@ -1,4 +1,3 @@
-/* ===== CHART CONTAINERS ===== */
 .chart-container {
   width: 100%;
   height: 100%;
@@ -10,7 +9,6 @@
   height: 100%;
 }
 
-/* ===== AXES ===== */
 .axis path,
 .axis line {
   stroke: #ccc;
@@ -39,7 +37,6 @@
   stroke: none;
 }
 
-/* ===== TOOLTIP ===== */
 .tooltip {
   position: fixed;
   pointer-events: none;
@@ -82,7 +79,6 @@
   color: #1a1a2e;
 }
 
-/* ===== LEGEND ===== */
 .legend {
   font-family: 'IBM Plex Sans', sans-serif;
   font-size: 11px;
@@ -102,7 +98,6 @@
   fill: #666;
 }
 
-/* ===== ANNOTATIONS ===== */
 .annotation-line {
   stroke: #888;
   stroke-width: 1;
@@ -123,7 +118,6 @@
   font-weight: 500;
 }
 
-/* ===== GLOBE ===== */
 .globe-water {
   fill: #e8f0fe;
 }
@@ -146,7 +140,6 @@
   stroke-width: 0.3;
 }
 
-/* Globe controls overlay */
 .globe-controls {
   position: absolute;
   bottom: 1rem;
@@ -208,7 +201,6 @@
   stroke-width: 1.5;
 }
 
-/* ===== SCATTER PLOT ===== */
 .scatter-dot {
   cursor: pointer;
   transition: opacity 0.3s, r 0.3s;
@@ -224,7 +216,6 @@
   stroke-dasharray: 6,4;
 }
 
-/* ===== GAPMINDER BUBBLES ===== */
 .gapminder-bubble {
   stroke: rgba(255,255,255,0.6);
   stroke-width: 1;
@@ -264,7 +255,6 @@
   pointer-events: none;
 }
 
-/* ===== PARALLEL COORDINATES (PROFILES) ===== */
 .pc-line {
   cursor: pointer;
   transition: stroke-width 0.15s ease, opacity 0.15s ease;
@@ -312,7 +302,6 @@
   fill: #555;
 }
 
-/* ===== BEESWARM (FACTORS) ===== */
 .beeswarm-dot {
   cursor: pointer;
 }
@@ -360,7 +349,6 @@
   fill: #555;
 }
 
-/* ===== CORRELATION SMALL MULTIPLES ===== */
 .corr-cell {
   cursor: pointer;
 }
@@ -388,7 +376,6 @@
   fill: #333;
 }
 
-/* ===== COMPARISON ===== */
 .stat-card {
   display: flex;
   justify-content: space-between;
@@ -419,7 +406,6 @@
   text-align: center;
 }
 
-/* ===== RADAR CHART ===== */
 .radar-axis {
   stroke: #ddd;
   stroke-width: 1;
@@ -446,8 +432,6 @@
   fill: #666;
 }
 
-/* ===== DECADES (Gapminder GDP vs deaths across decades) =====
-   Reuses .gapminder-bubble and .gapminder-year-label from above. */
 .decades-legend-text {
   font-family: 'IBM Plex Sans', sans-serif;
   font-size: 11px;
@@ -476,7 +460,6 @@
   border-color: #1a1a2e;
 }
 
-/* ===== BRUSH ===== */
 .brush .selection {
   fill: rgba(26, 26, 46, 0.1);
   stroke: #1a1a2e;
