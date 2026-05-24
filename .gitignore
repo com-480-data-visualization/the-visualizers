@@ -1,1 +1,5 @@
 node_modules/
+public/data/
+package.json
+package-lock.json
+vite.config.js
