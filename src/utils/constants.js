@@ -1,4 +1,3 @@
-// Region color palette (muted, accessible)
 export const REGION_COLORS = {
   'East Asia & Pacific': '#1b9e77',
   'Europe & Central Asia': '#7570b3',
@@ -33,14 +32,12 @@ export const INCOME_COLORS = {
   'Low income': '#dc2626',
 };
 
-// Featured countries for annotations
 export const FEATURED_COUNTRIES = [
   'Haiti', 'Chile', 'Japan', 'United States', 'China',
   'Iran, Islamic Rep.', 'Turkiye', 'Nepal', 'Indonesia', 'Pakistan',
   'New Zealand', 'Italy',
 ];
 
-// Short display names for countries
 export const DISPLAY_NAMES = {
   'Iran, Islamic Rep.': 'Iran',
   'Korea, Rep.': 'South Korea',

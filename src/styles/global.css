@@ -1,4 +1,3 @@
-/* ===== RESET & BASE ===== */
 *, *::before, *::after {
   margin: 0;
   padding: 0;
@@ -42,7 +41,6 @@ a:hover { text-decoration: underline; }
 strong { font-weight: 600; }
 em { font-style: italic; }
 
-/* ===== PROGRESS BAR ===== */
 .progress-bar {
   position: fixed;
   top: 0;
@@ -54,7 +52,6 @@ em { font-style: italic; }
   transition: width 0.1s ease-out;
 }
 
-/* ===== NAVIGATION ===== */
 .nav {
   position: fixed;
   top: 3px;
@@ -112,13 +109,11 @@ em { font-style: italic; }
   border-bottom-color: #dc2626;
 }
 
-/* ===== SECTIONS ===== */
 .section {
   min-height: 100vh;
   position: relative;
 }
 
-/* ===== SCROLL INDICATOR ===== */
 .scroll-indicator {
   position: absolute;
   bottom: 2rem;
@@ -152,7 +147,6 @@ em { font-style: italic; }
   to { opacity: 0.5; transform: translate(-50%, 0); }
 }
 
-/* ===== UTILITY ===== */
 .mono {
   font-family: 'IBM Plex Mono', monospace;
 }

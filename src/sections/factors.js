@@ -2,19 +2,12 @@ import * as d3 from 'd3';
 import { showTooltip, moveTooltip, hideTooltip } from '../components/tooltip.js';
 import { displayName } from '../utils/constants.js';
 
-// Beeswarm of curated earthquake-prone countries on one axis: deaths/event (log).
-// Dot size = avg magnitude. Dot color = simplified income bucket (2 groups).
-// Payoff: color sorts left-to-right (rich → poor = safe → deadly), but dot size
-// (magnitude) is scattered everywhere — proving magnitude isn't what separates them.
-
 export const FEATURED = [
   'Haiti', 'Afghanistan', 'Nepal',
   'Pakistan', 'Iran, Islamic Rep.', 'Philippines',
   'Japan', 'Chile', 'New Zealand', 'Italy', 'United States',
 ];
 
-// Collapse WB income groups to two buckets. Upper middle income countries
-// are excluded from the curated set.
 export function incomeBucket(income_group) {
   if (income_group === 'High income') return 'High income';
   if (income_group === 'Low income' || income_group === 'Lower middle income') {
@@ -72,10 +65,9 @@ function render() {
     .domain(d3.extent(data, d => d.avg_mag))
     .range([10, 26]);
 
-  const axisY = plotH - 20;
+  const axisY = Math.round(plotH / 2) + 35;
   const centerY = axisY - 140;
 
-  // Pre-compute final positions via force simulation
   data.forEach(d => {
     d.tx = xScale(d.deaths_per_event);
     d.ty = centerY;
@@ -88,13 +80,11 @@ function render() {
     .stop();
   for (let i = 0; i < 300; i++) sim.tick();
 
-  // Horizontal guide line
   g.append('line')
     .attr('class', 'beeswarm-guide')
     .attr('x1', 0).attr('x2', plotW)
     .attr('y1', axisY).attr('y2', axisY);
 
-  // X axis
   g.append('g')
     .attr('class', 'axis beeswarm-axis')
     .attr('transform', `translate(0,${axisY})`)
@@ -113,7 +103,6 @@ function render() {
     .attr('text-anchor', 'middle')
     .text('Deaths per earthquake — log scale');
 
-  // Polar-end labels
   g.append('text')
     .attr('class', 'beeswarm-endlabel')
     .attr('x', 0).attr('y', axisY + 22)
@@ -127,7 +116,6 @@ function render() {
     .attr('fill', '#dc2626')
     .text('more deaths →');
 
-  // Dots
   dotsG = g.append('g').attr('class', 'beeswarm-dots');
 
   const dot = dotsG.selectAll('g.beeswarm-dot')
@@ -164,7 +152,6 @@ function render() {
     hideTooltip();
   });
 
-  // Entry animation: drop in, staggered
   dot.transition()
     .duration(900)
     .delay((d, i) => 80 + i * 45)
@@ -199,7 +186,6 @@ function renderLegend(plotW, axisY) {
     .attr('x', 22).attr('y', 12)
     .text(d => d);
 
-  // Size legend (magnitude)
   const sizeLegend = g.append('g')
     .attr('class', 'beeswarm-size-legend')
     .attr('transform', `translate(${plotW - 160}, ${legendY})`);

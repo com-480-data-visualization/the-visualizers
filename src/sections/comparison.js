@@ -18,7 +18,6 @@ export function initComparison(earthquakes, countries) {
   earthquakesData = earthquakes;
   countriesData = countries;
 
-  // Populate dropdowns
   const sortedCountries = countries
     .filter(d => d.events >= 2)
     .sort((a, b) => a.country.localeCompare(b.country));
@@ -32,14 +31,12 @@ export function initComparison(earthquakes, countries) {
     selectB.add(new Option(name, c.country));
   });
 
-  // Default: Haiti vs Chile
   selectA.value = 'Haiti';
   selectB.value = 'Chile';
 
   selectA.addEventListener('change', () => updateComparison(selectA.value, selectB.value));
   selectB.addEventListener('change', () => updateComparison(selectA.value, selectB.value));
 
-  // Suggestion chips
   document.querySelectorAll('.suggestion-chip').forEach(chip => {
     chip.addEventListener('click', () => {
       document.querySelectorAll('.suggestion-chip').forEach(c => c.classList.remove('active'));
@@ -125,7 +122,6 @@ function renderRadar(dataA, dataB) {
   const n = RADAR_INDICATORS.length;
   const angleSlice = (2 * Math.PI) / n;
 
-  // Grid circles
   [0.25, 0.5, 0.75, 1].forEach(level => {
     const r = radius * level;
     g.append('circle')
@@ -133,7 +129,6 @@ function renderRadar(dataA, dataB) {
       .attr('r', r);
   });
 
-  // Axes
   RADAR_INDICATORS.forEach((ind, i) => {
     const angle = angleSlice * i - Math.PI / 2;
     const x2 = Math.cos(angle) * radius;
@@ -153,7 +148,6 @@ function renderRadar(dataA, dataB) {
       .text(ind.label);
   });
 
-  // Data polygons
   function getRadarPoints(data) {
     return RADAR_INDICATORS.map((ind, i) => {
       let val = data[ind.key] || 0;
@@ -167,13 +161,6 @@ function renderRadar(dataA, dataB) {
   const pointsA = getRadarPoints(dataA);
   const pointsB = getRadarPoints(dataB);
 
-  const line = d3.lineRadial()
-    .radius((d, i) => {
-      let val = d || 0;
-      return radius * val;
-    });
-
-  // Draw as polygons
   function drawPolygon(points, color) {
     const pathStr = 'M' + points.map(p => p.join(',')).join('L') + 'Z';
     g.append('path')
@@ -223,7 +210,6 @@ function renderComparisonTimeline(countryA, countryB) {
     .attr('transform', `translate(0,${h})`)
     .call(d3.axisBottom(xScale).tickFormat(d3.format('d')));
 
-  // Country A events (top half)
   g.selectAll('.eq-a')
     .data(eqsA)
     .join('circle')
@@ -236,7 +222,6 @@ function renderComparisonTimeline(countryA, countryB) {
     .on('mousemove', moveTooltip)
     .on('mouseleave', hideTooltip);
 
-  // Country B events (bottom half)
   g.selectAll('.eq-b')
     .data(eqsB)
     .join('circle')
@@ -249,7 +234,6 @@ function renderComparisonTimeline(countryA, countryB) {
     .on('mousemove', moveTooltip)
     .on('mouseleave', hideTooltip);
 
-  // Labels
   g.append('text')
     .attr('x', 0).attr('y', h / 3 - 20)
     .attr('font-size', 11).attr('fill', '#dc2626').attr('font-weight', 600)

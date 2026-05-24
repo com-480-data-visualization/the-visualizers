@@ -20,11 +20,9 @@ function positionTooltip(event) {
   let x = event.clientX + pad;
   let y = event.clientY - rect.height / 2;
 
-  // Flip if overflowing right
   if (x + rect.width > window.innerWidth - pad) {
     x = event.clientX - rect.width - pad;
   }
-  // Clamp vertical
   y = Math.max(pad, Math.min(y, window.innerHeight - rect.height - pad));
 
   tooltipEl.style.left = `${x}px`;

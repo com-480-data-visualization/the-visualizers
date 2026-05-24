@@ -1,5 +1,4 @@
 export function initTakeaway() {
-  // Animate takeaway section when it enters view
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
