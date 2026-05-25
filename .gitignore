@@ -3,3 +3,4 @@ public/data/
 package.json
 package-lock.json
 vite.config.js
+index.html
