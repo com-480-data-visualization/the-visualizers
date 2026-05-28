@@ -84,7 +84,7 @@ Website: https://com-480-data-visualization.github.io/the-visualizers/
 
 Process book: [Process Book.pdf](Process%20Book.pdf)
 
-Screencast: 
+Screencast: [Screencast.mp4](Screencast.mp4)
 
 ### Technical setup
 
@@ -139,7 +139,6 @@ the-visualizers/
 │   └── styles/              # Modular CSS (global, sections, charts, responsive)
 ├── data/                    # Raw source datasets (NOAA, World Bank, UNDP)
 └── Milestones/              # Milestone deliverables
-└── Process Book.pdf
 ```
 
 ### Intended usage
