@@ -82,6 +82,83 @@ Website: com-480-data-visualization.github.io/the-visualizers/
 
 Website: https://com-480-data-visualization.github.io/the-visualizers/
 
+Process book: [Process Book.pdf](Process%20Book.pdf)
+
+Screencast: 
+
+### Technical setup
+
+The website is a static site deployed via GitHub Pages. No build step is required to view it.
+
+**To run locally**, serve the `docs/` folder with any static file server:
+
+```bash
+# Clone the repository
+git clone https://github.com/com-480-data-visualization/the-visualizers.git
+cd the-visualizers
+
+# Serve with Python (or any static server)
+cd docs
+python3 -m http.server 8000
+# Open http://localhost:8000
+```
+
+**Dependencies (bundled in `docs/assets/`):**
+
+| Library | Purpose |
+|---------|---------|
+| [D3.js](https://d3js.org/) v7.9 | Data-driven bindings, scales, projections, and transitions |
+| [Scrollama](https://github.com/russellsamora/scrollama) v3.2 | Scroll-triggered step events for the narrative flow |
+| [TopoJSON Client](https://github.com/topojson/topojson-client) v3.1 | Decoding the TopoJSON world map for the globe section |
+
+**Project structure:**
+```
+the-visualizers/
+├── docs/                    # Deployed website (GitHub Pages root)
+│   ├── index.html           # Entry point
+│   ├── assets/              # Bundled JS and CSS
+│   └── data/                # Pre-processed JSON data files
+│       ├── earthquakes.json     # earthquake events with metadata
+│       ├── countries.json       # Country-level aggregated statistics
+│       ├── country_year.json    # Country-year socioeconomic indicators
+│       ├── paired_events.json   # Haiti vs Chile comparison data
+│       └── world-110m.json      # TopoJSON world map
+├── src/                     # Source code (for reference / development)
+│   ├── main.js              # Entry point — loads data, initializes all sections
+│   ├── sections/            # One module per visualization section
+│   │   ├── hook.js          # Opening Haiti vs Chile comparison
+│   │   ├── globe.js         # Interactive 3D orthographic globe
+│   │   ├── factors.js       # Single-axis country ranking
+│   │   ├── profiles.js      # Parallel coordinates chart
+│   │   ├── correlations.js  # Scatter plots with regression
+│   │   ├── decades.js       # Gapminder-style animated bubble chart
+│   │   ├── comparison.js    # Side-by-side country radar chart
+│   │   └── takeaway.js      # Conclusion
+│   ├── components/          # Reusable UI (tooltip, legend, axis, annotation)
+│   ├── utils/               # Constants, scales, data transforms, scroll manager
+│   └── styles/              # Modular CSS (global, sections, charts, responsive)
+├── data/                    # Raw source datasets (NOAA, World Bank, UNDP)
+└── Milestones/              # Milestone deliverables
+└── Process Book.pdf
+```
+
+### Intended usage
+
+The website is a **scrollytelling narrative** designed to be read top-to-bottom. The user scrolls through seven sections that progressively build the argument that earthquake mortality is shaped by socioeconomic conditions rather than seismic force alone.
+
+1. **Hook** - A side-by-side comparison of the 2010 Haiti (M7.0, 316,000 deaths) and Chile (M8.8, 558 deaths) earthquakes introduces the core question.
+2. **Globe** - An interactive 3D globe displays all significant earthquakes since 1960. Users can toggle circle sizes between magnitude and death toll to see that the two do not correlate geographically.
+3. **Factors** - Countries are ranked on a single axis by deaths per event, with dot size encoding average magnitude, revealing that the deadliest countries are not the most seismically active.
+4. **Profiles** - A parallel coordinates chart lets users trace individual countries across seven dimensions (GDP, HDI, hospital beds, urbanization, population density, magnitude, deaths) to see multi-dimensional vulnerability patterns.
+5. **Correlations** - Scatter plots with trend lines quantify the negative correlation between development indicators and earthquake mortality.
+6. **Decades** - A Gapminder-style animated bubble chart shows how countries have moved across GDP and mortality over six decades (1960s–2020s).
+7. **Comparison** - Users select any two earthquake-prone countries from dropdowns to compare their socioeconomic profiles via a radar chart and event timelines.
+
+**Interactions available throughout:**
+- Hover any data point for a detailed tooltip
+- Use the sticky navigation bar to jump between sections
+- A progress bar at the top tracks scroll position
+
 ## Late policy
 
 - < 24h: 80% of the grade for the milestone
