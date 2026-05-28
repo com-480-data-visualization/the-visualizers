@@ -80,6 +80,7 @@ Website: com-480-data-visualization.github.io/the-visualizers/
 
 **80% of the final grade**
 
+Website: https://com-480-data-visualization.github.io/the-visualizers/
 
 ## Late policy
 
